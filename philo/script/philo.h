@@ -6,24 +6,66 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/16 05:15:23 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/20 04:19:52 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H 
+#ifndef PHILO_H
 # define PHILO_H
 
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h>
 # include <limits.h>
+# include <string.h>
+# include <stdio.h>
 
+//Set return value
+# define RETURN_ERROR	-1
+# define RETURN_SUCCESS	1
+
+//Set the philo macro
+# define SLEEP			0
+# define EAT			1
+# define THINK			2
+# define DEAD			-1
+
+//Set Dev macro
+# ifndef PHILO_DEBUG
+#  define PHILO_DEBUG	1
+# endif
+
+//Set color strings
+# define RED			"\x1B[31m"
+# define GRN			"\x1B[32m"
+# define YEL			"\x1B[33m"
+# define RES			"\x1B[0m"
+
+//Set Struct
 typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
 }	t_list;
 
+typedef struct s_philo
+{
+	long	status;
+	long	id;
+}	t_philo;
+
+typedef struct s_philo_data
+{
+	struct s_list	*philo;
+	long			fork;
+	long			ttdie;
+	long			tteat;
+	long			ttsleep;
+	long			t_must_eat;
+}	t_philo_data;
+
+//Utils functions
+void	*ft_calloc(size_t nmemb, size_t size);
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_front(t_list **lst, t_list *lnew);
 int		ft_lstsize(t_list *lst);
@@ -36,5 +78,8 @@ t_list	*ft_lst_rotate(t_list **lst, size_t n);
 t_list	*ft_lst_unrotate(t_list **lst, size_t n);
 void	ft_lst_swap(t_list **a, t_list **b);
 t_list	**ft_alist(void);
+
+//Philo function
+inline void	data_free(t_philo_data *data);
 
 #endif

@@ -6,12 +6,11 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 13:46:11 by emaillet          #+#    #+#             */
-/*   Updated: 2025/01/20 16:17:58 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/20 03:20:02 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../libft.h"
-#include <stddef.h>
+#include "../philo.h"
 
 t_list	*ft_lst_rotate(t_list **lst, size_t n)
 {

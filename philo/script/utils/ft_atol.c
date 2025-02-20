@@ -6,11 +6,20 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 04:07:02 by emaillet          #+#    #+#             */
-/*   Updated: 2025/01/19 06:00:13 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/20 03:37:37 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../libft.h"
+#include "../philo.h"
+
+static int	ft_isdigit(int c)
+{
+	if (!c)
+		return (0);
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
 
 long	ft_atol(const char *str)
 {

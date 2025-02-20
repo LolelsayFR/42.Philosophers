@@ -1,6 +1,6 @@
 NAME			=	philo
 
-SRC				=	stript/main.c\
+SRC				=	script/main.c\
 					script/utils/ft_alist.c\
 					script/utils/ft_atol.c\
 					script/utils/ft_calloc.c\

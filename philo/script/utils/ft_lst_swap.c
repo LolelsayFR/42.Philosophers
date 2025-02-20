@@ -6,11 +6,11 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 16:21:52 by emaillet          #+#    #+#             */
-/*   Updated: 2025/01/20 16:28:39 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/20 03:20:13 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../libft.h"
+#include "../philo.h"
 
 void	ft_lst_swap(t_list **a, t_list **b)
 {
