@@ -6,13 +6,15 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 03:17:48 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/20 04:20:49 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/23 09:35:50 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <bits/types/struct_timeval.h>
+#include <sys/time.h>
 
-inline void	data_free(t_philo_data *data)
+void	data_free(t_philo_data *data)
 {
 	ft_lstclear(&(data->philo), free);
 	ft_lstclear(ft_alist(), free);
@@ -43,6 +45,11 @@ int	main(int ac, char **av)
 		printf(YEL"Fork Count = %ld\nTime to die = %ld\nTime to eat = %ld\nTime"
 			"to sleep = %ld\nTime each Philo must eat = %ld\n"RES, data->fork,
 			data->ttdie, data->tteat, data->ttsleep, data->t_must_eat);
+	while (1)
+	{
+		gettimeofday(&data->cur_time, NULL);
+		printf("Time val = %ld us\n", data->cur_time.tv_sec * 1000000 + data->cur_time.tv_usec);
+	}
 	data_free(data);
 	return (RETURN_SUCCESS);
 }

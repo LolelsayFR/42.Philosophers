@@ -6,19 +6,23 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/20 04:19:52 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/23 10:21:46 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+#include <bits/pthreadtypes.h>
+#include <bits/types/struct_timeval.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h>
 # include <limits.h>
 # include <string.h>
 # include <stdio.h>
+# include <pthread.h>
+# include <sys/time.h>
 
 //Set return value
 # define RETURN_ERROR	-1
@@ -50,8 +54,12 @@ typedef struct s_list
 
 typedef struct s_philo
 {
-	long	status;
-	long	id;
+	long				status;
+	long				id;
+	struct s_philo_data	*data;
+	pthread_mutex_t		*r_fork;
+	pthread_mutex_t		*l_fork;
+	struct timeval		last_eat_time;
 }	t_philo;
 
 typedef struct s_philo_data
@@ -62,6 +70,9 @@ typedef struct s_philo_data
 	long			tteat;
 	long			ttsleep;
 	long			t_must_eat;
+	struct timeval	start_time;
+	struct timeval	cur_time;
+	struct timeval	last_time;
 }	t_philo_data;
 
 //Utils functions
@@ -80,6 +91,6 @@ void	ft_lst_swap(t_list **a, t_list **b);
 t_list	**ft_alist(void);
 
 //Philo function
-inline void	data_free(t_philo_data *data);
+void	data_free(t_philo_data *data);
 
 #endif
