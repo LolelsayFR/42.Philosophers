@@ -6,22 +6,21 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/23 10:21:46 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/24 00:55:39 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <bits/pthreadtypes.h>
-#include <bits/types/struct_timeval.h>
+# include <bits/pthreadtypes.h>
+# include <bits/types/struct_timeval.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h>
 # include <limits.h>
 # include <string.h>
 # include <stdio.h>
-# include <pthread.h>
 # include <sys/time.h>
 
 //Set return value
@@ -73,6 +72,7 @@ typedef struct s_philo_data
 	struct timeval	start_time;
 	struct timeval	cur_time;
 	struct timeval	last_time;
+	long			loop_count;
 }	t_philo_data;
 
 //Utils functions
