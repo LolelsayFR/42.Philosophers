@@ -14,7 +14,7 @@ SRC				=	script/main.c\
 					script/utils/ft_lstsize.c\
 					script/utils/ft_lst_swap.c\
 
-CFLAGS			=	-Wall -Werror -Wextra -Ofast
+CFLAGS			=	-Wall -Werror -Wextra -pthread -Ofast
 
 all:	$(NAME) info
 

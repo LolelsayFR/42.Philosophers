@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 03:17:48 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/24 02:40:29 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/26 01:42:04 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,13 @@ void	data_free(t_philo_data *data)
 	ft_lstclear(ft_alist(), free);
 }
 
-static inline void	data_init(t_philo_data *data, char **av)
+static void	data_init(t_philo_data *data, char **av)
 {
 	static long	i = 0;
 
 	data->fork = ft_atol(av[1]);
+	if (data->fork <= 0)
+		return (ft_lstclear(ft_alist(), free), );
 	data->ttdie = ft_atol(av[2]);
 	data->tteat = ft_atol(av[3]);
 	data->ttsleep = ft_atol(av[4]);
