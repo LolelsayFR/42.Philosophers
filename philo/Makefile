@@ -1,6 +1,7 @@
 NAME			=	philo
 
 SRC				=	script/main.c\
+					script/philo.c\
 					script/utils/ft_alist.c\
 					script/utils/ft_atol.c\
 					script/utils/ft_calloc.c\
@@ -13,6 +14,7 @@ SRC				=	script/main.c\
 					script/utils/ft_lst_rotate.c\
 					script/utils/ft_lstsize.c\
 					script/utils/ft_lst_swap.c\
+					script/utils/philo_lstiter.c\
 
 CFLAGS			=	-Wall -Werror -Wextra -pthread -Ofast
 

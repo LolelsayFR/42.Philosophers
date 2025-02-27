@@ -6,11 +6,13 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 03:17:48 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/26 01:42:04 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/27 08:18:52 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <pthread.h>
+#include <stdio.h>
 
 t_philo	*new_philo(t_philo_data *d)
 {
@@ -23,6 +25,8 @@ t_philo	*new_philo(t_philo_data *d)
 		return (NULL);
 	new->data = d;
 	new->id = i;
+	pthread_create(&new->thread, NULL, philo_loop, (void *)new);
+	printf(GRN"Philo %ld was created\n"RES, i);
 	return (new);
 }
 
@@ -36,9 +40,9 @@ static void	data_init(t_philo_data *data, char **av)
 {
 	static long	i = 0;
 
-	data->fork = ft_atol(av[1]);
-	if (data->fork <= 0)
-		return (ft_lstclear(ft_alist(), free), );
+	data->fork_c = ft_atol(av[1]);
+	if (data->fork_c <= 0)
+		return (ft_lstclear(ft_alist(), free), exit (RETURN_ERROR));
 	data->ttdie = ft_atol(av[2]);
 	data->tteat = ft_atol(av[3]);
 	data->ttsleep = ft_atol(av[4]);
@@ -46,11 +50,11 @@ static void	data_init(t_philo_data *data, char **av)
 		data->t_must_eat = ft_atol(av[5]);
 	else
 		data->t_must_eat = RETURN_ERROR;
-	while (++i <= data->fork)
+	while (++i <= data->fork_c)
 		ft_lstadd_back(&data->philo, ft_lstnew(new_philo(data)));
 }
 
-int	philo_loop(t_philo_data *data)
+int	philo_countloop(t_philo_data *data)
 {
 	printf("Philo Count = %ld\n", data->loop_count + 1);
 	data->loop_count++;
@@ -68,12 +72,13 @@ int	main(int ac, char **av)
 	ft_lstadd_back(ft_alist(),
 		ft_lstnew(data = ft_calloc(1, sizeof(t_philo_data))));
 	data_init(data, av);
+	while (philo_countloop(data) > 0)
+		gettimeofday(&data->cur_time, NULL);
+	philo_lstiter_pthj(data->philo);
 	if (PHILO_DEBUG)
 		printf(YEL"Fork Count = %ld\nTime to die = %ld\nTime to eat = %ld\nTime"
-			"to sleep = %ld\nTime each Philo must eat = %ld\n"RES, data->fork,
+			"to sleep = %ld\nTime each Philo must eat = %ld\n"RES, data->fork_c,
 			data->ttdie, data->tteat, data->ttsleep, data->t_must_eat);
-	while (philo_loop(data) > 0)
-		gettimeofday(&data->cur_time, NULL);
 	data_free(data);
 	return (RETURN_SUCCESS);
 }

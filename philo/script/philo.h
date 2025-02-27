@@ -6,15 +6,13 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/24 00:55:39 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/02/27 08:11:31 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <bits/pthreadtypes.h>
-# include <bits/types/struct_timeval.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h>
@@ -22,6 +20,7 @@
 # include <string.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <pthread.h>
 
 //Set return value
 # define RETURN_ERROR	-1
@@ -45,12 +44,6 @@
 # define RES			"\x1B[0m"
 
 //Set Struct
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}	t_list;
-
 typedef struct s_philo
 {
 	long				status;
@@ -59,12 +52,20 @@ typedef struct s_philo
 	pthread_mutex_t		*r_fork;
 	pthread_mutex_t		*l_fork;
 	struct timeval		last_eat_time;
+	pthread_t			thread;
 }	t_philo;
+
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}	t_list;
 
 typedef struct s_philo_data
 {
 	struct s_list	*philo;
-	long			fork;
+	struct s_list	*fork;
+	long			fork_c;
 	long			ttdie;
 	long			tteat;
 	long			ttsleep;
@@ -92,5 +93,7 @@ t_list	**ft_alist(void);
 
 //Philo function
 void	data_free(t_philo_data *data);
+void	*philo_loop(void *philo);
+void	philo_lstiter_pthj(t_list *lst);
 
 #endif
