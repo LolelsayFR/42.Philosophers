@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/27 08:11:31 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/01 11:07:17 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include "philo_lang.h"
 
 //Set return value
 # define RETURN_ERROR	-1
@@ -30,18 +31,14 @@
 # define SLEEP			0
 # define EAT			1
 # define THINK			2
+# define TAKE_FORK		3
 # define DEAD			-1
 
 //Set Dev macro
 # ifndef PHILO_DEBUG
-#  define PHILO_DEBUG	1
+#  define PHILO_DEBUG	0
 # endif
-
-//Set color strings
-# define RED			"\x1B[31m"
-# define GRN			"\x1B[32m"
-# define YEL			"\x1B[33m"
-# define RES			"\x1B[0m"
+# define ONE_S			1000000
 
 //Set Struct
 typedef struct s_philo
@@ -64,16 +61,16 @@ typedef struct s_list
 typedef struct s_philo_data
 {
 	struct s_list	*philo;
-	struct s_list	*fork;
 	long			fork_c;
+	long			philo_c;
 	long			ttdie;
 	long			tteat;
 	long			ttsleep;
 	long			t_must_eat;
 	struct timeval	start_time;
 	struct timeval	cur_time;
-	struct timeval	last_time;
 	long			loop_count;
+	int				was_init;
 }	t_philo_data;
 
 //Utils functions
@@ -90,10 +87,13 @@ t_list	*ft_lst_rotate(t_list **lst, size_t n);
 t_list	*ft_lst_unrotate(t_list **lst, size_t n);
 void	ft_lst_swap(t_list **a, t_list **b);
 t_list	**ft_alist(void);
+void	wr_error(char *str);
+void	wr_philo_msg(struct timeval time, t_philo *philo);
 
 //Philo function
 void	data_free(t_philo_data *data);
-void	*philo_loop(void *philo);
+void	*philo_loop(t_philo *philo);
 void	philo_lstiter_pthj(t_list *lst);
+void	philo_lstiter_r_fork(t_list *lst_head);
 
 #endif

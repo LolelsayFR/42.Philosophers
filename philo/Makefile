@@ -14,6 +14,7 @@ SRC				=	script/main.c\
 					script/utils/ft_lst_rotate.c\
 					script/utils/ft_lstsize.c\
 					script/utils/ft_lst_swap.c\
+					script/utils/philo_write.c\
 					script/utils/philo_lstiter.c\
 
 CFLAGS			=	-Wall -Werror -Wextra -pthread -Ofast
