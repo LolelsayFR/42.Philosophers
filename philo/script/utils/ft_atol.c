@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 04:07:02 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/20 03:37:37 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/01 20:48:50 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@ long	ft_atol(const char *str)
 		val = val * 10 + (str[i] - '0');
 		i++;
 	}
+	if (str[i] != '\0')
+		return (RETURN_ERROR);
 	return (val * sign);
 }

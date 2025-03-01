@@ -6,18 +6,27 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 07:33:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/01 09:26:11 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/01 20:53:21 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-#include <bits/types/struct_timeval.h>
+
+static int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
 
 void	wr_error(char *str)
 {
 	int		i;
 
-	write(2, LANG_E, 29);
+	write(2, LANG_E, ft_strlen(LANG_E));
 	i = 1;
 	while (str[i] != '\0')
 		i++;

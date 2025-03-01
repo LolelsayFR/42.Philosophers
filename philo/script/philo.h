@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/01 11:07:17 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/01 18:43:51 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,15 @@
 typedef struct s_philo
 {
 	long				status;
+	int					starve;
 	long				id;
 	struct s_philo_data	*data;
 	pthread_mutex_t		*r_fork;
 	pthread_mutex_t		*l_fork;
+	int					fork_count;
 	struct timeval		last_eat_time;
 	pthread_t			thread;
+	long				meal;
 }	t_philo;
 
 typedef struct s_list
@@ -66,11 +69,12 @@ typedef struct s_philo_data
 	long			ttdie;
 	long			tteat;
 	long			ttsleep;
-	long			t_must_eat;
+	long			n_must_eat;
 	struct timeval	start_time;
 	struct timeval	cur_time;
 	long			loop_count;
 	int				was_init;
+	pthread_mutex_t	*mu_philo_c;
 }	t_philo_data;
 
 //Utils functions
@@ -89,11 +93,15 @@ void	ft_lst_swap(t_list **a, t_list **b);
 t_list	**ft_alist(void);
 void	wr_error(char *str);
 void	wr_philo_msg(struct timeval time, t_philo *philo);
+long	time_to_ms(struct timeval time);
+t_philo	*get_philo(long id, t_philo_data *d);
 
 //Philo function
 void	data_free(t_philo_data *data);
 void	*philo_loop(t_philo *philo);
 void	philo_lstiter_pthj(t_list *lst);
 void	philo_lstiter_r_fork(t_list *lst_head);
+void	philo_lstiter_starve_u(t_list *lst_head);
+int		philo_mul_cond(int i, t_philo_data *d, t_philo *philo);
 
 #endif
