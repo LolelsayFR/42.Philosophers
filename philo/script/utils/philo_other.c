@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/04 08:32:54 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/04 09:13:03 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ void	philosleep(int ms, t_philo *philo)
 			break ;
 		usleep(ONE_MS / 10);
 		ms--;
-		if (philo->status != EAT)
-			death_check(philo);
+		if (philo->status == EAT)
+			gettimeofday(&philo->last_eat_time, NULL);
+		death_check(philo);
 	}
 }

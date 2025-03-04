@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:31:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/04 08:59:41 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/04 09:16:30 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	*philo_eat(t_philo *philo)
 	if (PHILO_DEBUG && philo->meal == philo->data->n_must_eat)
 		printf("Philo number %ld is full after %ld meal\n",
 			philo->id, philo->meal);
-	gettimeofday(&philo->last_eat_time, NULL);
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
 	return (NULL);
@@ -70,10 +69,12 @@ void	*philo_loop(t_philo *philo)
 		&& !philo->data->is_finish)
 	{
 		philo_eat(philo);
-		if (philo->status == DEAD)
+		if (philo->status == DEAD || philo->meal == philo->data->n_must_eat
+			|| philo->data->is_finish)
 			break ;
 		philo_think(philo);
-		if (philo->status == DEAD)
+		if (philo->status == DEAD || philo->meal == philo->data->n_must_eat
+			|| philo->data->is_finish)
 			break ;
 		philo_sleep(philo);
 	}
