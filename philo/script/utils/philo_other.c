@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/01 21:28:30 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/04 08:32:54 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,32 @@ t_philo	*get_philo(long id, t_philo_data *d)
 
 int	philo_mul_cond(int i, t_philo_data *d, t_philo *philo)
 {
-	(void)philo;
 	if (i == 1 && d->fork_c == d->philo_c)
 		return (1);
+	else if (i == 2 && philo->meal >= philo->data->n_must_eat
+		&& philo->data->n_must_eat != -1)
+		return (1);
 	return (0);
+}
+
+int	death_check(t_philo *philo)
+{
+	if ((time_to_ms(philo->data->cur_time)
+			- time_to_ms(philo->last_eat_time)) >= philo->data->ttdie)
+		return (philo_set_status(philo, DEAD), 1);
+	return (0);
+}
+
+void	philosleep(int ms, t_philo *philo)
+{
+	ms *= 10;
+	while (ms > 0)
+	{
+		if (philo->status == DEAD)
+			break ;
+		usleep(ONE_MS / 10);
+		ms--;
+		if (philo->status != EAT)
+			death_check(philo);
+	}
 }

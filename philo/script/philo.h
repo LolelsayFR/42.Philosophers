@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/01 18:43:51 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/04 08:40:16 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # ifndef PHILO_DEBUG
 #  define PHILO_DEBUG	0
 # endif
-# define ONE_S			1000000
+# define ONE_MS			1000
 
 //Set Struct
 typedef struct s_philo
@@ -49,7 +49,6 @@ typedef struct s_philo
 	struct s_philo_data	*data;
 	pthread_mutex_t		*r_fork;
 	pthread_mutex_t		*l_fork;
-	int					fork_count;
 	struct timeval		last_eat_time;
 	pthread_t			thread;
 	long				meal;
@@ -72,9 +71,10 @@ typedef struct s_philo_data
 	long			n_must_eat;
 	struct timeval	start_time;
 	struct timeval	cur_time;
-	long			loop_count;
-	int				was_init;
+	long			full_count;
+	pthread_mutex_t	*was_init;
 	pthread_mutex_t	*mu_philo_c;
+	int				is_finish;
 }	t_philo_data;
 
 //Utils functions
@@ -103,5 +103,7 @@ void	philo_lstiter_pthj(t_list *lst);
 void	philo_lstiter_r_fork(t_list *lst_head);
 void	philo_lstiter_starve_u(t_list *lst_head);
 int		philo_mul_cond(int i, t_philo_data *d, t_philo *philo);
-
+int		death_check(t_philo *philo);
+void	philo_set_status(t_philo *philo, long status);
+void	philosleep(int ms, t_philo *philo);
 #endif

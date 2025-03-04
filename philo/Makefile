@@ -20,6 +20,8 @@ SRC				=	script/main.c\
 					script/utils/philo_lstiter.c\
 
 CFLAGS			=	-Wall -Werror -Wextra -pthread
+DATA_RACE_FLAGS	=	-Wall -Werror -Wextra -fsanitize=thread
+ADRESS_FLAGS	=	-Wall -Werror -Wextra -fsanitize=address
 
 all:	$(NAME) info
 

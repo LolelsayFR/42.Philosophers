@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 07:27:33 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/01 13:38:35 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/04 07:15:09 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@
 # define LANG_W_CP	"Philo created %ld/%ld \n\x1b[0m"
 
 //Philo messages
-# define L_TIME	"⌚ ~ %ldH:%ldM:%ldS:%ldMS ~ "
-# define L_P_TH	"\x1b[48;2;240;65;65;1m[Philo %ld]\x1b[0m is thinking 🧠"
-# define L_P_TF	"\x1b[48;2;140;140;140;1m[Philo %ld]\x1b[0m has taken a fork 🍴"
-# define L_P_SL	"\x1b[48;2;20;50;160;1m[Philo %ld]\x1b[0m is sleeping 💤"
-# define L_P_EA	"\x1b[48;2;160;80;20;1m[Philo %ld]\x1b[0m is eating 🍗"
-# define L_P_DI	"\x1b[48;2;42;42;42;1m[Philo %ld]\x1b[0m died 💀"
+# define L_TIME	"⌚ \x1b[2;29m[ %10ldMS ]\x1b[0m "
+# define L_P_TH	"\x1b[48;2;100;0;150;1m Philo %3ld \x1b[0m is thinking 🧠"
+# define L_P_TF	"\x1b[48;2;120;120;20;1m Philo %3ld \x1b[0m has taken a fork 🍴"
+# define L_P_SL	"\x1b[48;2;0;0;160;1m Philo %3ld \x1b[0m is sleeping 💤"
+# define L_P_EA	"\x1b[48;2;120;50;10;1m Philo %3ld \x1b[0m is eating 🍗"
+# define L_P_DI	"\x1b[48;2;160;0;0;1m Philo %3ld \x1b[0m died 💀"
 #endif

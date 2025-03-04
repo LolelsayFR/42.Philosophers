@@ -6,16 +6,13 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 03:17:48 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/01 21:27:05 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/04 08:16:55 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include "philo_lang.h"
-#include <bits/pthreadtypes.h>
 #include <pthread.h>
-#include <stdio.h>
-#include <sys/time.h>
 
 t_philo	*new_philo(t_philo_data *d)
 {
@@ -32,14 +29,14 @@ t_philo	*new_philo(t_philo_data *d)
 		return (NULL);
 	new->data = d;
 	new->id = i;
-	pthread_create(&new->thread, NULL, (void *)philo_loop, (void *)new);
 	pthread_mutex_init(new->l_fork, NULL);
+	pthread_create(&new->thread, NULL, (void *)philo_loop, (void *)new);
 	if (PHILO_DEBUG)
 		printf(GRN"Philo thread %ld is created"RES, new->id);
 	if (d->fork_c > 200)
 	{
 		printf(LANG_W LANG_W_TMP LANG_W_CP, new->id, d->philo_c);
-		usleep(ONE_S / 10);
+		usleep(ONE_MS * 100);
 	}
 	return (new);
 }
@@ -76,15 +73,16 @@ static void	data_init(t_philo_data *data, char **av)
 	data->tteat = ft_atol(av[3]);
 	data->ttsleep = ft_atol(av[4]);
 	pthread_mutex_init(data->mu_philo_c, NULL);
+	pthread_mutex_init(data->mu_philo_c, NULL);
 	if (av[5] != NULL && av[5][0] != '\0' && ft_atol(av[5]) > 0)
 		data->n_must_eat = ft_atol(av[5]);
 	else
 		data->n_must_eat = RETURN_ERROR;
 	data_checker(data);
+	pthread_mutex_lock(data->was_init);
 	while (++i <= data->fork_c)
 		ft_lstadd_back(&data->philo, ft_lstnew(new_philo(data)));
 	philo_lstiter_r_fork(data->philo);
-	data->was_init = 1;
 }
 
 int	main(int ac, char **av)
@@ -97,15 +95,20 @@ int	main(int ac, char **av)
 		ft_lstnew(data = ft_calloc(1, sizeof(t_philo_data))));
 	ft_lstadd_front(ft_alist(),
 		ft_lstnew(data->mu_philo_c = ft_calloc(1, sizeof(pthread_mutex_t))));
-	if (data == NULL || data->mu_philo_c == NULL)
+	ft_lstadd_front(ft_alist(),
+		ft_lstnew(data->was_init = ft_calloc(1, sizeof(pthread_mutex_t))));
+	if (data == NULL || data->mu_philo_c == NULL || data->was_init == NULL)
 		return (wr_error(LANG_E_MALLOC), RETURN_ERROR);
-	gettimeofday(&data->start_time, NULL);
 	data_init(data, av);
-	while (data->philo_c == data->fork_c)
+	gettimeofday(&data->start_time, NULL);
+	gettimeofday(&data->cur_time, NULL);
+	pthread_mutex_unlock(data->was_init);
+	while (data->philo_c == data->fork_c && data->full_count <= data->fork_c)
 	{
 		gettimeofday(&data->cur_time, NULL);
 		philo_lstiter_starve_u(data->philo);
 	}
+	data->is_finish = 1;
 	philo_lstiter_pthj(data->philo);
 	data_free(data);
 	return (RETURN_SUCCESS);
