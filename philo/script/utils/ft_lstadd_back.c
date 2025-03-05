@@ -6,11 +6,24 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 23:28:20 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/20 03:39:34 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:41:23 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
+
+static t_list	*ft_lstlast(t_list *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst)
+	{
+		if (!lst->next)
+			break ;
+		lst = lst->next;
+	}
+	return (lst);
+}
 
 void	ft_lstadd_back(t_list **lst, t_list *lnew)
 {

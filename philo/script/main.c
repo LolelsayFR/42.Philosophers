@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 03:17:48 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/04 08:16:55 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/05 10:47:22 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,29 @@ t_philo	*new_philo(t_philo_data *d)
 	new = ft_calloc(1, sizeof(t_philo));
 	ft_lstadd_front(ft_alist(),
 		ft_lstnew(new->l_fork = ft_calloc(1, sizeof(pthread_mutex_t))));
-	if (new == NULL || new->l_fork == NULL)
+	ft_lstadd_front(ft_alist(),
+		ft_lstnew(new->shield = ft_calloc(1, sizeof(pthread_mutex_t))));
+	if (new == NULL || new->l_fork == NULL || new->shield == NULL)
 		return (wr_error(LANG_E_MALLOC), data_free(d), NULL);
 	if (new == NULL)
 		return (NULL);
 	new->data = d;
 	new->id = i;
 	pthread_mutex_init(new->l_fork, NULL);
+	pthread_mutex_init(new->shield, NULL);
 	pthread_create(&new->thread, NULL, (void *)philo_loop, (void *)new);
 	if (PHILO_DEBUG)
 		printf(GRN"Philo thread %ld is created"RES, new->id);
 	if (d->fork_c > 200)
-	{
 		printf(LANG_W LANG_W_TMP LANG_W_CP, new->id, d->philo_c);
-		usleep(ONE_MS * 100);
-	}
 	return (new);
 }
 
 void	data_free(t_philo_data *data)
 {
+	pthread_mutex_destroy(data->was_init);
+	data->is_finish = 1;
+	philo_lstiter_pthj(data->philo);
 	if (PHILO_DEBUG)
 		printf("\nFork Count = %ld\nTime to die = %ld\nTime to eat = %ld\nTime"
 			" to sleep = %ld\nTime each Philo must eat = %ld\n", data->fork_c,
@@ -77,7 +80,7 @@ static void	data_init(t_philo_data *data, char **av)
 	if (av[5] != NULL && av[5][0] != '\0' && ft_atol(av[5]) > 0)
 		data->n_must_eat = ft_atol(av[5]);
 	else
-		data->n_must_eat = RETURN_ERROR;
+		data->n_must_eat = -1;
 	data_checker(data);
 	pthread_mutex_lock(data->was_init);
 	while (++i <= data->fork_c)
@@ -103,13 +106,10 @@ int	main(int ac, char **av)
 	gettimeofday(&data->start_time, NULL);
 	gettimeofday(&data->cur_time, NULL);
 	pthread_mutex_unlock(data->was_init);
-	while (data->philo_c == data->fork_c && data->full_count <= data->fork_c)
-	{
+	while (data->philo_c == data->fork_c && data->full_count != data->fork_c)
 		gettimeofday(&data->cur_time, NULL);
-		philo_lstiter_starve_u(data->philo);
-	}
-	data->is_finish = 1;
-	philo_lstiter_pthj(data->philo);
+	if (PHILO_DEBUG)
+		printf(YEL"MAIN LOOP FINISHED"RES);
 	data_free(data);
 	return (RETURN_SUCCESS);
 }

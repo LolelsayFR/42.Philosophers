@@ -10,11 +10,7 @@ SRC				=	script/main.c\
 					script/utils/ft_lstadd_front.c\
 					script/utils/ft_lstclear.c\
 					script/utils/ft_lstdelone.c\
-					script/utils/ft_lstlast.c\
 					script/utils/ft_lstnew.c\
-					script/utils/ft_lst_rotate.c\
-					script/utils/ft_lstsize.c\
-					script/utils/ft_lst_swap.c\
 					script/utils/philo_write.c\
 					script/utils/philo_other.c\
 					script/utils/philo_lstiter.c\
