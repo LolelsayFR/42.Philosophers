@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/05 11:21:13 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:50:21 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,9 @@ void	philosleep(int ms, t_philo *philo)
 	long	target;
 
 	target = time_to_ms(philo->data->cur_time, philo->data) + ms;
-	while (time_to_ms(philo->data->cur_time, philo->data) + 1 <= target
-		&& !philo->data->is_finish)
+	while (time_to_ms(philo->data->cur_time, philo->data) < target
+		&& !philo->data->is_finish && philo->status != DEAD)
 	{
-		if (philo->status == DEAD)
-			break ;
 		if (philo->status == EAT)
 			gettimeofday(&philo->last_eat_time, NULL);
 		death_check(philo);

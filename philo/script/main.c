@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 03:17:48 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/05 10:47:22 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/05 23:53:58 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ static void	data_init(t_philo_data *data, char **av)
 	pthread_mutex_lock(data->was_init);
 	while (++i <= data->fork_c)
 		ft_lstadd_back(&data->philo, ft_lstnew(new_philo(data)));
-	philo_lstiter_r_fork(data->philo);
+	if (data->fork_c > 1)
+		philo_lstiter_r_fork(data->philo);
 }
 
 int	main(int ac, char **av)

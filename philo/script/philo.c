@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:31:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/05 11:24:06 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/05 19:46:57 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,21 @@ void	philo_think(t_philo *philo)
 	death_check(philo);
 	philo_set_status(philo, THINK);
 	death_check(philo);
-	pthread_mutex_lock(philo->l_fork);
-	death_check(philo);
-	philo_set_status(philo, TAKE_FORK);
-	pthread_mutex_lock(philo->r_fork);
-	death_check(philo);
 }
 
 void	*philo_eat(t_philo *philo)
 {
 	if (philo->data->fork_c == 1)
 		return (philosleep(philo->data->ttdie, philo), NULL);
+	pthread_mutex_lock(philo->l_fork);
+	death_check(philo);
+	philo_set_status(philo, TAKE_FORK);
+	pthread_mutex_lock(philo->r_fork);
 	death_check(philo);
 	philo_set_status(philo, TAKE_FORK);
 	philo_set_status(philo, EAT);
 	philo->meal++;
+	gettimeofday(&philo->last_eat_time, NULL);
 	philosleep(philo->data->tteat, philo);
 	if (PHILO_DEBUG && philo->meal == philo->data->n_must_eat)
 		printf("Philo number %ld is full after %ld meal\n",
