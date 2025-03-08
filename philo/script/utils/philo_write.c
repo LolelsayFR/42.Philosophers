@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 07:33:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/05 10:33:44 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/08 03:58:09 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,21 @@ void	wr_error(char *str)
 	write(2, str, i);
 }
 
-void	wr_philo_msg(struct timeval time, t_philo *philo)
+void	wr_philo_msg(t_philo *philo, t_philo_data *data, int status)
 {
-	if (philo->status == SLEEP
-		&& philo->data->philo_c > 1 && !philo->data->is_finish)
-		printf(L_TIME L_P_SL"\n", time_to_ms(time, philo->data), philo->id);
-	else if (philo->status == THINK
-		&& philo->data->philo_c > 1 && !philo->data->is_finish)
-		printf(L_TIME L_P_TH"\n", time_to_ms(time, philo->data), philo->id);
-	else if (philo->status == TAKE_FORK
-		&& philo->data->philo_c > 1 && !philo->data->is_finish)
-		printf(L_TIME L_P_TF"\n", time_to_ms(time, philo->data), philo->id);
-	else if (philo->status == DEAD && !philo->data->is_finish
-		&& philo->data->philo_c == philo->data->fork_c)
-		printf(L_TIME L_P_DI"\n", time_to_ms(time, philo->data), philo->id);
-	else if (philo->status == EAT && (philo->meal > philo->data->n_must_eat
-			|| philo->data->n_must_eat != -1) && philo->data->philo_c > 1
-		&& !philo->data->is_finish)
-		printf(L_TIME L_P_EA"\n", time_to_ms(time, philo->data), philo->id);
+	if (status == SLEEP && !data->is_finish && !philo->isfull)
+		printf(L_TIME L_P_SL"\n",
+			time_to_ms(philo->cur_time, philo), philo->id);
+	else if (status == THINK && !data->is_finish && !philo->isfull)
+		printf(L_TIME L_P_TH"\n",
+			time_to_ms(philo->cur_time, philo), philo->id);
+	else if (status == TAKE_FORK && !data->is_finish && !philo->isfull)
+		printf(L_TIME L_P_TF"\n",
+			time_to_ms(philo->cur_time, philo), philo->id);
+	else if (status == DEAD && !data->is_finish && !philo->isfull)
+		printf(L_TIME L_P_DI"\n",
+			time_to_ms(philo->cur_time, philo), philo->id);
+	else if (status == EAT && !data->is_finish && !philo->isfull)
+		printf(L_TIME L_P_EA"\n",
+			time_to_ms(philo->cur_time, philo), philo->id);
 }

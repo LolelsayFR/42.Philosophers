@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:40:35 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/05 10:47:53 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/08 04:00:26 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	philo_lstiter_pthj(t_list *lst)
 	}
 }
 
-void	philo_lstiter_r_fork(t_list *lst_head)
+void	philo_lstiter_r_fork(t_list *lst_head, t_philo_data *data)
 {
 	t_philo	*philo;
 	t_philo	*philo_n;
@@ -40,7 +40,7 @@ void	philo_lstiter_r_fork(t_list *lst_head)
 	while (lst)
 	{
 		philo = (t_philo *)lst->content;
-		if (philo->data->fork_c <= 1)
+		if (data->fork_c <= 1)
 			philo->r_fork = NULL;
 		else if (lst->next != NULL)
 			philo_n = (t_philo *)lst->next->content;
@@ -49,4 +49,28 @@ void	philo_lstiter_r_fork(t_list *lst_head)
 		philo->r_fork = philo_n->l_fork;
 		lst = lst->next;
 	}
+}
+
+int	philo_lstiter_end(t_list *lst_head)
+{
+	t_philo	*philo;
+	t_list	*lst;
+	int		full_count;
+
+	full_count = 1;
+	lst = lst_head;
+	if (!lst)
+		return (0);
+	while (lst)
+	{
+		philo = (t_philo *)lst->content;
+		if (philo->isdead == 1)
+			return (printf("kjsdehfhsdjk"), 0);
+		if (philo->isfull == 0)
+			full_count = 0;
+		lst = lst->next;
+	}
+	if (full_count == 1)
+		return (0);
+	return (1);
 }

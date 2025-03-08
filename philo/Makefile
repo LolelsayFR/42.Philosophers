@@ -39,7 +39,7 @@ d_info: hello
 
 $(NAME): ${SRC}
 	@echo "\e[48;2;0;155;0;1m Compile Philo \e[0m\n"
-	cc ${SRC} ${CFLAGS} -o $(NAME)
+	cc ${SRC} ${ADRESS_FLAGS} -o $(NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
 
 fclean: hello clean

@@ -6,13 +6,13 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/05 20:50:21 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/08 03:09:19 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-long	time_to_ms(struct timeval time, t_philo_data *data)
+long	time_to_ms(struct timeval time, t_philo *data)
 {
 	long	result;
 
@@ -21,47 +21,28 @@ long	time_to_ms(struct timeval time, t_philo_data *data)
 	return (result);
 }
 
-t_philo	*get_philo(long id, t_philo_data *d)
+int	death_check(t_philo *philo, t_philo_data *data)
 {
-	t_philo	*philo;
-	t_list	*lst;
-
-	lst = d->philo;
-	if (!lst)
-		return (NULL);
-	if (id > d->fork_c)
-		id = 1;
-	if (id < 1)
-		id = d->fork_c;
-	while (lst)
-	{
-		philo = (t_philo *)lst->content;
-		if (philo->id == id)
-			return (philo);
-		lst = lst->next;
-	}
-	return (NULL);
-}
-
-int	death_check(t_philo *philo)
-{
-	if ((time_to_ms(philo->data->cur_time, philo->data)
-			- time_to_ms(philo->last_eat_time, philo->data))
-		>= philo->data->ttdie)
-		return (philo_set_status(philo, DEAD), 1);
+	gettimeofday(&philo->cur_time, NULL);
+	if ((time_to_ms(philo->cur_time, philo)
+			- time_to_ms(philo->last_eat_time, philo)) >= data->ttdie)
+		return (philo_set_status(philo, DEAD, data), 1);
 	return (0);
 }
 
-void	philosleep(int ms, t_philo *philo)
+void	philosleep(const int ms, t_philo *philo, t_philo_data *data)
 {
 	long	target;
 
-	target = time_to_ms(philo->data->cur_time, philo->data) + ms;
-	while (time_to_ms(philo->data->cur_time, philo->data) < target
-		&& !philo->data->is_finish && philo->status != DEAD)
+	target = time_to_ms(philo->cur_time, philo) + ms;
+	while (time_to_ms(philo->cur_time, philo) < target
+		&& philo->status != DEAD)
 	{
+		gettimeofday(&philo->cur_time, NULL);
 		if (philo->status == EAT)
 			gettimeofday(&philo->last_eat_time, NULL);
-		death_check(philo);
+		death_check(philo, data);
+		if (philo->status == DEAD)
+			break ;
 	}
 }
