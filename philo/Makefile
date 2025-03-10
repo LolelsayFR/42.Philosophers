@@ -23,7 +23,7 @@ all:	$(NAME) info
 
 debug:	d_info ${SRC}
 	@echo "\e[48;2;0;155;0;1m Compile debug Philo \e[0m\n"
-	cc ${SRC} -D PHILO_DEBUG=1 ${DATA_RACE_FLAGS} -o $(D_NAME)
+	cc ${SRC} -D PHILO_DEBUG=1 ${CFLAGS} -o $(D_NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
 
 hello:
@@ -39,7 +39,7 @@ d_info: hello
 
 $(NAME): ${SRC}
 	@echo "\e[48;2;0;155;0;1m Compile Philo \e[0m\n"
-	cc ${SRC} ${ADRESS_FLAGS} -o $(NAME)
+	cc ${SRC} ${DATA_RACE_FLAGS} -o $(NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
 
 fclean: hello clean

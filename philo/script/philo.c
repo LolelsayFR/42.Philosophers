@@ -6,11 +6,12 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:31:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/08 04:00:00 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:30:13 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <pthread.h>
 
 void	philo_set_status(t_philo *philo, long status, t_philo_data *data)
 {
@@ -50,11 +51,13 @@ void	*philo_eat(t_philo *philo, t_philo_data *data)
 	pthread_mutex_lock(philo->r_fork);
 	philo_set_status(philo, TAKE_FORK, data);
 	philo_set_status(philo, EAT, data);
+	pthread_mutex_lock(data->philo_edit);
 	philo->meal++;
-	gettimeofday(&philo->last_eat_time, NULL);
-	philosleep(data->tteat, philo, data);
 	if (philo->meal == data->n_must_eat)
 		philo->isfull = 1;
+	pthread_mutex_unlock(data->philo_edit);
+	gettimeofday(&philo->last_eat_time, NULL);
+	philosleep(data->tteat, philo, data);
 	if (PHILO_DEBUG && philo->meal == data->n_must_eat)
 		printf("Philo number %ld is full after %ld meal\n",
 			philo->id, philo->meal);
@@ -63,7 +66,7 @@ void	*philo_eat(t_philo *philo, t_philo_data *data)
 	return (NULL);
 }
 
-void	philo_loop(t_philargs *arg)
+void	*philo_loop(t_philargs *arg)
 {
 	gettimeofday(&arg->philo->cur_time, NULL);
 	gettimeofday(&arg->philo->start_time, NULL);
@@ -72,10 +75,6 @@ void	philo_loop(t_philargs *arg)
 	gettimeofday(&arg->philo->last_eat_time, NULL);
 	while (!arg->data->is_finish && !death_check(arg->philo, arg->data))
 	{
-		if (arg->philo->id % 2 == 1)
-			usleep(50);
-		if (arg->philo->id == 1)
-			usleep(50);
 		philo_eat(arg->philo, arg->data);
 		if (arg->data->is_finish || death_check(arg->philo, arg->data))
 			break ;
@@ -84,4 +83,5 @@ void	philo_loop(t_philargs *arg)
 			break ;
 		philo_sleep(arg->philo, arg->data);
 	}
+	return (arg);
 }

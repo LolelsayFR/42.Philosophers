@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:08:25 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/08 03:03:23 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/10 11:27:36 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,10 @@ int	main(int ac, char **av)
 		return (wr_error(LANG_E_ARG), RETURN_ERROR);
 	ft_lstadd_back(ft_alist(),
 		ft_lstnew(data = ft_calloc(1, sizeof(t_philo_data))));
+	ft_lstadd_back(ft_alist(),
+		ft_lstnew(data->philo_edit = ft_calloc(1, sizeof(pthread_mutex_t))));
 	philo = NULL;
-	if (data == NULL)
+	if (data == NULL || data->philo_edit == NULL)
 		return (wr_error(LANG_E_MALLOC), RETURN_ERROR);
 	data_init(data, av, &philo);
 	while (data->start_time.tv_usec > 600 || data->start_time.tv_usec < 400)
