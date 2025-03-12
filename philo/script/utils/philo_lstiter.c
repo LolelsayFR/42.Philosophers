@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:40:35 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 02:33:22 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 03:46:52 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ int	philo_lstiter_end(t_list *lst_head, t_philo_data *data)
 
 	full_count = 0;
 	lst = lst_head;
-	if (!lst)
-		return (0);
 	while (lst)
 	{
 		philo = lst->content;
