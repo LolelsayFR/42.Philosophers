@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 03:45:05 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 04:19:23 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,29 @@ int	death_check(t_philo *philo, t_philo_data *data)
 	if ((time_to_ms(philo->cur_time, data->start_time)
 			- time_to_ms(philo->last_eat_time, data->start_time))
 		>= data->ttdie)
-		return (philo_set_status(philo, DEAD, data), 1);
+	{
+		philo_set_status(philo, DEAD, data);
+		return (1);
+	}
 	return (0);
 }
 
 void	philosleep(const int ms, t_philo *philo, t_philo_data *data)
 {
-	long	target;
+	struct timeval	start;
+	struct timeval	now;
+	long			elapsed;
 
-	target = time_to_ms(philo->cur_time, data->start_time) + ms;
-	while (time_to_ms(philo->cur_time, data->start_time) < target
-		&& philo->status != DEAD)
+	death_check(philo, data);
+	gettimeofday(&start, NULL);
+	while (1)
 	{
-		gettimeofday(&philo->cur_time, NULL);
-		if (philo->status == EAT)
-			gettimeofday(&philo->last_eat_time, NULL);
 		death_check(philo, data);
-		if (philo->status == DEAD)
+		gettimeofday(&now, NULL);
+		elapsed = time_to_ms(now, start);
+		if (elapsed >= ms || death_check(philo, data))
 			break ;
+		usleep(50);
 	}
 }
 

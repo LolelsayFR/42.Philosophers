@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:31:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 03:32:10 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 04:32:19 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static void	philo_take_fork(t_philo *philo, t_philo_data *data)
 	{
 		pthread_mutex_lock(philo->l_fork);
 		philo_set_status(philo, TAKE_FORK, data);
+		death_check(philo, data);
 		pthread_mutex_lock(philo->r_fork);
 		philo_set_status(philo, TAKE_FORK, data);
 	}
@@ -40,9 +41,11 @@ static void	philo_take_fork(t_philo *philo, t_philo_data *data)
 	{
 		pthread_mutex_lock(philo->r_fork);
 		philo_set_status(philo, TAKE_FORK, data);
+		death_check(philo, data);
 		pthread_mutex_lock(philo->l_fork);
 		philo_set_status(philo, TAKE_FORK, data);
 	}
+	death_check(philo, data);
 }
 
 void	*philo_eat(t_philo *philo, t_philo_data *data)
@@ -51,13 +54,14 @@ void	*philo_eat(t_philo *philo, t_philo_data *data)
 		return (philosleep(data->ttdie, philo, data), NULL);
 	philo_take_fork(philo, data);
 	philo_set_status(philo, EAT, data);
+	gettimeofday(&philo->last_eat_time, NULL);
+	philosleep(data->tteat, philo, data);
+	death_check(philo, data);
 	pthread_mutex_lock(data->philo_edit);
 	philo->meal++;
 	if (philo->meal == data->n_must_eat)
 		philo->isfull = 1;
 	pthread_mutex_unlock(data->philo_edit);
-	gettimeofday(&philo->last_eat_time, NULL);
-	philosleep(data->tteat, philo, data);
 	if (PHILO_DEBUG && philo->meal == data->n_must_eat)
 		printf("Philo number %ld is full after %ld meal\n",
 			philo->id, philo->meal);
@@ -68,12 +72,18 @@ void	*philo_eat(t_philo *philo, t_philo_data *data)
 
 void	*philo_loop(t_philargs *arg)
 {
+	long	is_sim_finished;
+
 	pthread_mutex_lock(arg->data->philo_edit);
 	pthread_mutex_unlock(arg->data->philo_edit);
 	gettimeofday(&arg->philo->cur_time, NULL);
 	gettimeofday(&arg->philo->last_eat_time, NULL);
-	while (!arg->data->is_finish && !death_check(arg->philo, arg->data))
+	is_sim_finished = 0;
+	while (!is_sim_finished || !arg->philo->isdead || !arg->philo->isfull)
 	{
+		pthread_mutex_lock(arg->data->philo_edit);
+		is_sim_finished = arg->data->is_finish;
+		pthread_mutex_unlock(arg->data->philo_edit);
 		philo_eat(arg->philo, arg->data);
 		if (arg->data->is_finish || death_check(arg->philo, arg->data))
 			break ;

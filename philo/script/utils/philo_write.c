@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 07:33:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 03:37:49 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 04:27:53 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ void	wr_error(char *str)
 
 void	wr_philo_msg(t_philo *philo, t_philo_data *data, int status)
 {
+	int	is_sim_finished;
+
+	pthread_mutex_lock(data->philo_edit);
+	is_sim_finished = data->is_finish;
+	pthread_mutex_unlock(data->philo_edit);
+	if (is_sim_finished || philo->isdead || philo->isfull)
+		return ;
 	pthread_mutex_lock(data->wr_msg);
 	if (status == SLEEP && !data->is_finish && !philo->isfull)
 		printf(L_TIME L_P_SL"\n",

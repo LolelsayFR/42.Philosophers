@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:40:35 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 03:46:52 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 04:23:24 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	philo_lstiter_pthj(t_list *lst)
 {
 	t_philo	*philo;
 
-	if (!lst)
-		return ;
 	while (lst)
 	{
 		philo = (t_philo *)lst->content;
@@ -62,15 +60,15 @@ int	philo_lstiter_end(t_list *lst_head, t_philo_data *data)
 	while (lst)
 	{
 		philo = lst->content;
-		pthread_mutex_lock(data->philo_edit);
+		pthread_mutex_lock(data->shield);
 		if (philo->isdead == 1)
 		{
-			pthread_mutex_unlock(data->philo_edit);
+			pthread_mutex_unlock(data->shield);
 			return (0);
 		}
 		if (!philo->isfull)
 			full_count = 1;
-		pthread_mutex_unlock(data->philo_edit);
+		pthread_mutex_unlock(data->shield);
 		lst = lst->next;
 	}
 	return (full_count);
