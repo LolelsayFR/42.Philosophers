@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:31:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 02:20:45 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 03:32:10 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	*philo_loop(t_philargs *arg)
 	pthread_mutex_lock(arg->data->philo_edit);
 	pthread_mutex_unlock(arg->data->philo_edit);
 	gettimeofday(&arg->philo->cur_time, NULL);
-	gettimeofday(&arg->philo->start_time, NULL);
 	gettimeofday(&arg->philo->last_eat_time, NULL);
 	while (!arg->data->is_finish && !death_check(arg->philo, arg->data))
 	{

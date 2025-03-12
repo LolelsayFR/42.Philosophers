@@ -6,30 +6,31 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 02:22:46 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 02:51:21 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-long	time_to_ms(struct timeval time, t_philo *data)
+long	time_to_ms(struct timeval current_time, struct timeval start_time)
 {
-	long	result;
-
-	result = (time.tv_sec - data->start_time.tv_sec) * 1000
-		+ (time.tv_usec - data->start_time.tv_usec) / 1000;
-	return (result);
+	return ((current_time.tv_sec - start_time.tv_sec) * 1000
+		+ (current_time.tv_usec - start_time.tv_usec) / 1000);
 }
 
 int	death_check(t_philo *philo, t_philo_data *data)
 {
-	if (data->is_finish)
-	{
+	int	is_sim_finished;
+
+	pthread_mutex_lock(data->philo_edit);
+	is_sim_finished = data->is_finish;
+	pthread_mutex_unlock(data->philo_edit);
+	if (is_sim_finished)
 		return (1);
-	}
 	gettimeofday(&philo->cur_time, NULL);
-	if ((time_to_ms(philo->cur_time, philo)
-			- time_to_ms(philo->last_eat_time, philo)) >= data->ttdie)
+	if ((time_to_ms(philo->cur_time, data->start_time)
+			- time_to_ms(philo->last_eat_time, data->start_time))
+		>= data->ttdie)
 		return (philo_set_status(philo, DEAD, data), 1);
 	return (0);
 }
@@ -38,8 +39,8 @@ void	philosleep(const int ms, t_philo *philo, t_philo_data *data)
 {
 	long	target;
 
-	target = time_to_ms(philo->cur_time, philo) + ms;
-	while (time_to_ms(philo->cur_time, philo) < target
+	target = time_to_ms(philo->cur_time, data->start_time) + ms;
+	while (time_to_ms(philo->cur_time, data->start_time) < target
 		&& philo->status != DEAD)
 	{
 		gettimeofday(&philo->cur_time, NULL);

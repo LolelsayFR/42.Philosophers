@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:08:25 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 02:34:42 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 03:37:29 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,14 @@ int	main(int ac, char **av)
 		ft_lstnew(data->philo_edit = ft_calloc(1, sizeof(pthread_mutex_t))));
 	ft_lstadd_front(ft_alist(),
 		ft_lstnew(data->shield = ft_calloc(1, sizeof(pthread_mutex_t))));
+	ft_lstadd_front(ft_alist(),
+		ft_lstnew(data->wr_msg = ft_calloc(1, sizeof(pthread_mutex_t))));
 	pthread_mutex_init(data->shield, NULL);
 	pthread_mutex_init(data->philo_edit, NULL);
+	pthread_mutex_init(data->wr_msg, NULL);
 	philo = NULL;
-	if (data == NULL || data->philo_edit == NULL || data->shield == NULL)
+	if (data == NULL || data->philo_edit == NULL || data->shield == NULL
+		|| data->wr_msg == NULL)
 		return (wr_error(LANG_E_MALLOC), RETURN_ERROR);
 	data_init(data, av, &philo);
 	if (PHILO_DEBUG)
