@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:08:25 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 01:35:15 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 02:11:07 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,12 @@ t_philo	*new_philo(t_philo_data *d, t_list *philo)
 	arg->philo = ft_calloc(1, sizeof(t_philo));
 	ft_lstadd_front(ft_alist(),
 		ft_lstnew(arg->philo->l_fork = ft_calloc(1, sizeof(pthread_mutex_t))));
-	ft_lstadd_front(ft_alist(),
-		ft_lstnew(arg->philo->shield = ft_calloc(1, sizeof(pthread_mutex_t))));
-	if (arg->philo == NULL || arg->philo->l_fork == NULL
-		|| arg->philo->shield == NULL)
+	if (arg->philo == NULL || arg->philo->l_fork == NULL)
 		return (wr_error(LANG_E_MALLOC), data_free(d, philo), NULL);
 	if (arg->philo == NULL)
 		return (NULL);
 	arg->philo->id = i;
 	pthread_mutex_init(arg->philo->l_fork, NULL);
-	pthread_mutex_init(arg->philo->shield, NULL);
 	pthread_create(&arg->philo->thread, NULL, (void *)philo_loop, (void *)arg);
 	if (PHILO_DEBUG)
 		printf(GRN"Philo thread %ld is created"RES, arg->philo->id);
@@ -71,6 +67,7 @@ static void	data_init(t_philo_data *data, char **av, t_list **philo)
 {
 	static long	i = 0;
 
+	pthread_mutex_lock(data->philo_edit);
 	data->philo_c = ft_atol(av[1]);
 	data->fork_c = data->philo_c;
 	data->ttdie = ft_atol(av[2]);
@@ -85,6 +82,12 @@ static void	data_init(t_philo_data *data, char **av, t_list **philo)
 		ft_lstadd_front(philo, ft_lstnew(new_philo(data, *philo)));
 	if (data->fork_c > 1)
 		philo_lstiter_r_fork(*philo, data);
+	while (data->start_time.tv_usec > 300 || data->start_time.tv_usec < 100)
+		gettimeofday(&data->start_time, NULL);
+	pthread_mutex_unlock(data->philo_edit);
+	data->was_init = 1;
+	while (philo_lstiter_end(*philo, data))
+		philo_lstiter_end(*philo, data);
 }
 
 int	main(int ac, char **av)
@@ -98,17 +101,14 @@ int	main(int ac, char **av)
 		ft_lstnew(data = ft_calloc(1, sizeof(t_philo_data))));
 	ft_lstadd_back(ft_alist(),
 		ft_lstnew(data->philo_edit = ft_calloc(1, sizeof(pthread_mutex_t))));
+	ft_lstadd_front(ft_alist(),
+		ft_lstnew(data->shield = ft_calloc(1, sizeof(pthread_mutex_t))));
+	pthread_mutex_init(data->shield, NULL);
+	pthread_mutex_init(data->philo_edit, NULL);
 	philo = NULL;
-	if (data == NULL || data->philo_edit == NULL)
+	if (data == NULL || data->philo_edit == NULL || data->shield == NULL)
 		return (wr_error(LANG_E_MALLOC), RETURN_ERROR);
-	pthread_mutex_lock(data->philo_edit);
 	data_init(data, av, &philo);
-	while (data->start_time.tv_usec > 600 || data->start_time.tv_usec < 400)
-		gettimeofday(&data->start_time, NULL);
-	pthread_mutex_unlock(data->philo_edit);
-	data->was_init = 1;
-	while (philo_lstiter_end(philo))
-		philo_lstiter_end(philo);
 	if (PHILO_DEBUG)
 		printf(YEL"MAIN LOOP FINISHED"RES);
 	data_free(data, philo);

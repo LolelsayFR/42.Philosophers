@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/10 11:28:23 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 02:09:22 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct s_philo
 	long				id;
 	pthread_mutex_t		*r_fork;
 	pthread_mutex_t		*l_fork;
-	pthread_mutex_t		*shield;
 	struct timeval		last_eat_time;
 	struct timeval		start_time;
 	pthread_t			thread;
@@ -78,6 +77,7 @@ typedef struct s_philo_data
 	struct timeval	start_time;
 	int				is_finish;
 	pthread_mutex_t	*philo_edit;
+	pthread_mutex_t	*shield;
 }	t_philo_data;
 
 typedef struct s_philargs
@@ -104,7 +104,7 @@ t_philo	*get_philo(long id, t_philo_data *d);
 //Philo function
 void	data_free(t_philo_data *data, t_list *philo);
 void	*philo_loop(t_philargs *arg);
-int		philo_lstiter_end(t_list *lst_head);
+int		philo_lstiter_end(t_list *lst_head, t_philo_data *data);
 void	philo_lstiter_pthj(t_list *lst);
 void	philo_lstiter_r_fork(t_list *lst_head, t_philo_data *data);
 int		death_check(t_philo *philo, t_philo_data *data);
