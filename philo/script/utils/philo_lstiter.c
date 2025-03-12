@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:40:35 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/08 04:00:26 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 01:17:44 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int	philo_lstiter_end(t_list *lst_head)
 		return (0);
 	while (lst)
 	{
-		philo = (t_philo *)lst->content;
+		philo = lst->content;
 		if (philo->isdead == 1)
-			return (printf("kjsdehfhsdjk"), 0);
+			return (0);
 		if (philo->isfull == 0)
 			full_count = 0;
 		lst = lst->next;

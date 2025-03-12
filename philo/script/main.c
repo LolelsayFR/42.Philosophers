@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:08:25 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/10 11:27:36 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 01:35:15 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ t_philo	*new_philo(t_philo_data *d, t_list *philo)
 
 void	data_free(t_philo_data *data, t_list *philo)
 {
+	pthread_mutex_lock(data->philo_edit);
 	data->is_finish = 1;
+	pthread_mutex_unlock(data->philo_edit);
 	philo_lstiter_pthj(philo);
 	if (PHILO_DEBUG)
 		printf("\nFork Count = %ld\nTime to die = %ld\nTime to eat = %ld\nTime"
@@ -99,12 +101,14 @@ int	main(int ac, char **av)
 	philo = NULL;
 	if (data == NULL || data->philo_edit == NULL)
 		return (wr_error(LANG_E_MALLOC), RETURN_ERROR);
+	pthread_mutex_lock(data->philo_edit);
 	data_init(data, av, &philo);
 	while (data->start_time.tv_usec > 600 || data->start_time.tv_usec < 400)
 		gettimeofday(&data->start_time, NULL);
+	pthread_mutex_unlock(data->philo_edit);
 	data->was_init = 1;
 	while (philo_lstiter_end(philo))
-		usleep(ONE_MS);
+		philo_lstiter_end(philo);
 	if (PHILO_DEBUG)
 		printf(YEL"MAIN LOOP FINISHED"RES);
 	data_free(data, philo);

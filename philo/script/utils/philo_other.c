@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/08 03:09:19 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 01:32:32 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,16 @@ void	philosleep(const int ms, t_philo *philo, t_philo_data *data)
 		if (philo->status == DEAD)
 			break ;
 	}
+}
+
+void	philo_set_status(t_philo *philo, long status, t_philo_data *data)
+{
+	if (philo->status == status)
+		return ;
+	gettimeofday(&philo->cur_time, NULL);
+	if (status != TAKE_FORK && philo->status != DEAD)
+		philo->status = status;
+	if (philo->status == DEAD || status == DEAD)
+		philo->isdead = 1;
+	wr_philo_msg(philo, data, status);
 }

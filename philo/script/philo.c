@@ -6,26 +6,11 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:31:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/10 11:30:13 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 01:30:12 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h>
-
-void	philo_set_status(t_philo *philo, long status, t_philo_data *data)
-{
-	if (status == DEAD)
-		philo->isdead = 1;
-	pthread_mutex_lock(philo->shield);
-	if (philo->status == status)
-		return ;
-	gettimeofday(&philo->cur_time, NULL);
-	if (status != TAKE_FORK && philo->status != DEAD)
-		philo->status = status;
-	wr_philo_msg(philo, data, status);
-	pthread_mutex_unlock(philo->shield);
-}
 
 void	philo_sleep(t_philo *philo, t_philo_data *data)
 {
@@ -42,14 +27,29 @@ void	philo_think(t_philo *philo, t_philo_data *data)
 	death_check(philo, data);
 }
 
+static void	philo_take_fork(t_philo *philo, t_philo_data *data)
+{
+	if (philo->id % 2 == 1)
+	{
+		pthread_mutex_lock(philo->l_fork);
+		philo_set_status(philo, TAKE_FORK, data);
+		pthread_mutex_lock(philo->r_fork);
+		philo_set_status(philo, TAKE_FORK, data);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->r_fork);
+		philo_set_status(philo, TAKE_FORK, data);
+		pthread_mutex_lock(philo->l_fork);
+		philo_set_status(philo, TAKE_FORK, data);
+	}
+}
+
 void	*philo_eat(t_philo *philo, t_philo_data *data)
 {
 	if (data->fork_c == 1)
 		return (philosleep(data->ttdie, philo, data), NULL);
-	pthread_mutex_lock(philo->l_fork);
-	philo_set_status(philo, TAKE_FORK, data);
-	pthread_mutex_lock(philo->r_fork);
-	philo_set_status(philo, TAKE_FORK, data);
+	philo_take_fork(philo, data);
 	philo_set_status(philo, EAT, data);
 	pthread_mutex_lock(data->philo_edit);
 	philo->meal++;
@@ -68,10 +68,10 @@ void	*philo_eat(t_philo *philo, t_philo_data *data)
 
 void	*philo_loop(t_philargs *arg)
 {
+	pthread_mutex_lock(arg->data->philo_edit);
+	pthread_mutex_unlock(arg->data->philo_edit);
 	gettimeofday(&arg->philo->cur_time, NULL);
 	gettimeofday(&arg->philo->start_time, NULL);
-	while (!arg->data->was_init)
-		gettimeofday(&arg->philo->start_time, NULL);
 	gettimeofday(&arg->philo->last_eat_time, NULL);
 	while (!arg->data->is_finish && !death_check(arg->philo, arg->data))
 	{
