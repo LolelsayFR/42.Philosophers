@@ -6,11 +6,21 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 04:07:02 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/01 20:48:50 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 05:35:12 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
+
+static int	ft_strlen(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
 
 static int	ft_isdigit(int c)
 {
@@ -27,7 +37,7 @@ long	ft_atol(const char *str)
 	long	sign;
 	long	i;
 
-	if (!str)
+	if (!str || ft_strlen(str) >= 10)
 		return (0);
 	val = 0;
 	sign = 1;

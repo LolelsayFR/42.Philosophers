@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 04:19:23 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 05:09:07 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	philosleep(const int ms, t_philo *philo, t_philo_data *data)
 	struct timeval	now;
 	long			elapsed;
 
-	death_check(philo, data);
 	gettimeofday(&start, NULL);
 	while (1)
 	{
+		gettimeofday(&philo->cur_time, NULL);
 		death_check(philo, data);
 		gettimeofday(&now, NULL);
 		elapsed = time_to_ms(now, start);
@@ -70,6 +70,11 @@ void	philo_set_status(t_philo *philo, long status, t_philo_data *data)
 	if (status != TAKE_FORK && philo->status != DEAD)
 		philo->status = status;
 	if (philo->status == DEAD || status == DEAD)
+	{
 		philo->isdead = 1;
+		pthread_mutex_lock(data->philo_edit);
+		data->is_finish = 1;
+		pthread_mutex_unlock(data->philo_edit);
+	}
 	pthread_mutex_unlock(data->shield);
 }

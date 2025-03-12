@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 07:27:33 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/04 07:15:09 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 05:39:54 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 //Set error messages
 # define LANG_E			"\x1b[48;2;100;0;0;1m[Error]\x1b[0m "
 # define LANG_E_MALLOC	"\x1b[31mMalloc Error 🤡\n\x1b[0m"
-# define LANG_E_IPA		"\x1b[31mInvalid Philo Arg 🧠\n\x1b[0m"
-# define LANG_E_TTD		"\x1b[31mInvalid Time to die Arg 💀\n\x1b[0m"
-# define LANG_E_TTE		"\x1b[31mInvalid Time to eat Arg 🍗\n\x1b[0m"
-# define LANG_E_TTS		"\x1b[31mInvalid Time to sleep Arg 💤\n\x1b[0m"
+# define LANG_E_IPA		"\x1b[31mInvalid Philo Arg (1) 🧠\n\x1b[0m"
+# define LANG_E_TTD		"\x1b[31mInvalid Time to die Arg (2) 💀\n\x1b[0m"
+# define LANG_E_TTE		"\x1b[31mInvalid Time to eat Arg (3) 🍗\n\x1b[0m"
+# define LANG_E_TTS		"\x1b[31mInvalid Time to sleep Arg (4) 💤\n\x1b[0m"
 # define LANG_E_ARG		"\x1b[31mInvalid Args count 🧐\n\x1b[0m"
 
 //Set warn messages

@@ -6,12 +6,11 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 07:33:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 04:27:53 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 05:31:05 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-#include <pthread.h>
 
 static int	ft_strlen(char *str)
 {

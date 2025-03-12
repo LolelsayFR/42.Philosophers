@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:08:25 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 04:35:20 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/12 05:39:14 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ t_philo	*new_philo(t_philo_data *d, t_list *philo)
 void	data_free(t_philo_data *data, t_list *philo)
 {
 	pthread_mutex_lock(data->philo_edit);
+	pthread_mutex_lock(data->wr_msg);
 	data->is_finish = 1;
 	pthread_mutex_unlock(data->philo_edit);
+	pthread_mutex_unlock(data->wr_msg);
+	usleep(ONE_MS * 10);
 	philo_lstiter_pthj(philo);
 	if (PHILO_DEBUG)
 		printf("\nFork Count = %ld\nTime to die = %ld\nTime to eat = %ld\nTime"
@@ -53,13 +56,13 @@ void	data_free(t_philo_data *data, t_list *philo)
 
 static void	data_checker(t_philo_data *data)
 {
-	if (data->philo_c <= 0)
+	if (data->philo_c <= 0 || data->philo_c > 200)
 		return (ft_lstclear(ft_alist(), free), wr_error(LANG_E_IPA), exit (-1));
-	if (data->ttdie <= 0)
+	if (data->ttdie <= 0 || data->ttdie > INT_MAX)
 		return (ft_lstclear(ft_alist(), free), wr_error(LANG_E_TTD), exit (-1));
-	if (data->tteat <= 0)
+	if (data->tteat <= 0 || data->tteat > INT_MAX)
 		return (ft_lstclear(ft_alist(), free), wr_error(LANG_E_TTE), exit (-1));
-	if (data->ttsleep <= 0)
+	if (data->ttsleep <= 0 || data->ttsleep > INT_MAX)
 		return (ft_lstclear(ft_alist(), free), wr_error(LANG_E_TTS), exit (-1));
 }
 
@@ -73,7 +76,8 @@ static void	data_init(t_philo_data *data, char **av, t_list **philo)
 	data->ttdie = ft_atol(av[2]);
 	data->tteat = ft_atol(av[3]);
 	data->ttsleep = ft_atol(av[4]);
-	if (av[5] != NULL && av[5][0] != '\0' && ft_atol(av[5]) > 0)
+	if (av[5] != NULL && av[5][0] != '\0' && ft_atol(av[5]) > 0
+		&& ft_atol(av[5]) < LONG_MAX)
 		data->n_must_eat = ft_atol(av[5]);
 	else
 		data->n_must_eat = -1;
@@ -82,10 +86,10 @@ static void	data_init(t_philo_data *data, char **av, t_list **philo)
 		ft_lstadd_front(philo, ft_lstnew(new_philo(data, *philo)));
 	if (data->fork_c > 1)
 		philo_lstiter_r_fork(*philo, data);
-	while (data->start_time.tv_usec > 300 || data->start_time.tv_usec < 100)
+	while (data->start_time.tv_usec > 200 || data->start_time.tv_usec < 50)
 		gettimeofday(&data->start_time, NULL);
-	pthread_mutex_unlock(data->philo_edit);
 	data->was_init = 1;
+	pthread_mutex_unlock(data->philo_edit);
 	while (philo_lstiter_end(*philo, data))
 		philo_lstiter_end(*philo, data);
 }
