@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 23:40:56 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/13 00:16:57 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ int	death_check(t_philo *philo, t_philo_data *data)
 {
 	int	is_sim_finished;
 
-	sem_wait(data->philo_edit);
 	is_sim_finished = data->is_finish;
-	sem_post(data->philo_edit);
 	if (is_sim_finished)
 		return (1);
 	gettimeofday(&philo->cur_time, NULL);
@@ -59,10 +57,8 @@ void	philosleep(const int ms, t_philo *philo, t_philo_data *data)
 
 void	philo_set_status(t_philo *philo, long status, t_philo_data *data)
 {
-	sem_wait(data->shield);
 	if (philo->status == status)
 	{
-		sem_post(data->shield);
 		return ;
 	}
 	gettimeofday(&philo->cur_time, NULL);
@@ -72,9 +68,6 @@ void	philo_set_status(t_philo *philo, long status, t_philo_data *data)
 	if (philo->status == DEAD || status == DEAD)
 	{
 		philo->isdead = 1;
-		sem_wait(data->philo_edit);
 		data->is_finish = 1;
-		sem_post(data->philo_edit);
 	}
-	sem_post(data->shield);
 }

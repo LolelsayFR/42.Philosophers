@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 23:37:20 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/13 00:28:23 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@
 # include <string.h>
 # include <stdio.h>
 # include <sys/time.h>
-# include <pthread.h>
 # include <semaphore.h>
+# include <pthread.h>
+# include <fcntl.h>
 # include <sys/wait.h>
 # include "philo_lang.h"
 
@@ -49,14 +50,12 @@ typedef struct s_philo
 	long				status;
 	int					starve;
 	long				id;
-	pthread_mutex_t		*r_fork;
-	pthread_mutex_t		*l_fork;
 	struct timeval		last_eat_time;
 	pthread_t			thread;
 	long				meal;
 	int					isfull;
 	int					isdead;
-	int					u_eat[2];
+	pid_t				fork_pid;
 }	t_philo;
 
 typedef struct s_list
@@ -79,7 +78,7 @@ typedef struct s_philo_data
 	struct timeval	start_time;
 	int				is_finish;
 	sem_t			*philo_edit;
-	sem_t			*shield;
+	sem_t			*start;
 	sem_t			*wr_msg;
 }	t_philo_data;
 
@@ -109,7 +108,6 @@ void	data_free(t_philo_data *data, t_list *philo);
 void	*philo_loop(t_philargs *arg);
 int		philo_lstiter_end(t_list *lst_head, t_philo_data *data);
 void	philo_lstiter_pthj(t_list *lst);
-void	philo_lstiter_r_fork(t_list *lst_head, t_philo_data *data);
 int		death_check(t_philo *philo, t_philo_data *data);
 void	philo_set_status(t_philo *philo, long status, t_philo_data *data);
 void	philosleep(const int ms, t_philo *philo, t_philo_data *data);

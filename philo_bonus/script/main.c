@@ -6,12 +6,13 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:08:25 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 23:46:49 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/13 00:36:49 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include "philo_lang.h"
+#include <fcntl.h>
 
 t_philo	*new_philo(t_philo_data *d, t_list *philo)
 {
@@ -23,14 +24,13 @@ t_philo	*new_philo(t_philo_data *d, t_list *philo)
 		ft_lstnew(arg = ft_calloc(1, sizeof(t_philargs))));
 	arg->data = d;
 	arg->philo = ft_calloc(1, sizeof(t_philo));
-	ft_lstadd_front(ft_alist(),
-		ft_lstnew(arg->philo->l_fork = ft_calloc(1, sizeof(pthread_mutex_t))));
-	if (arg->philo == NULL || arg->philo->l_fork == NULL)
-		return (wr_error(LANG_E_MALLOC), data_free(d, philo), NULL);
 	if (arg->philo == NULL)
-		return (NULL);
+		return (wr_error(LANG_E_MALLOC), data_free(d, philo), NULL);
 	arg->philo->id = i;
-	pthread_create(&arg->philo->thread, NULL, (void *)philo_loop, (void *)arg);
+	arg->philo->fork_pid = fork();
+	gettimeofday(&arg->data->start_time, NULL);
+	if (arg->philo->fork_pid == 0)
+		return (philo_loop(arg), arg->philo);
 	if (PHILO_DEBUG)
 		printf(GRN"Philo thread %ld is created"RES, arg->philo->id);
 	return (arg->philo);
@@ -69,10 +69,10 @@ static void	data_init(t_philo_data *data, char **av, t_list **philo)
 {
 	static long	i = 0;
 
-	sem_init(data->wr_msg, 0, 0);
-	sem_init(data->shield, 0, 0);
-	sem_init(data->fork_sem, 0, 0);
-	sem_init(data->philo_edit, 0, 0);
+	data->wr_msg = sem_open("/msg", O_CREAT, 0644, 1);
+	data->start = sem_open("/start", O_CREAT, 0644, 0);
+	data->fork_sem = sem_open("/fork", O_CREAT, 0644, data->fork_c);
+	data->philo_edit = sem_open("/philo", O_CREAT, 0644, 1);
 	data->philo_c = ft_atol(av[1]);
 	data->fork_c = data->philo_c;
 	data->ttdie = ft_atol(av[2]);
@@ -89,6 +89,7 @@ static void	data_init(t_philo_data *data, char **av, t_list **philo)
 	while (data->start_time.tv_usec > 200 || data->start_time.tv_usec < 50)
 		gettimeofday(&data->start_time, NULL);
 	data->was_init = 1;
+	sem_post(data->start);
 	while (philo_lstiter_end(*philo, data))
 		philo_lstiter_end(*philo, data);
 }
@@ -105,13 +106,13 @@ int	main(int ac, char **av)
 	ft_lstadd_back(ft_alist(),
 		ft_lstnew(data->philo_edit = ft_calloc(1, sizeof(pthread_mutex_t))));
 	ft_lstadd_front(ft_alist(),
-		ft_lstnew(data->shield = ft_calloc(1, sizeof(pthread_mutex_t))));
+		ft_lstnew(data->start = ft_calloc(1, sizeof(pthread_mutex_t))));
 	ft_lstadd_front(ft_alist(),
 		ft_lstnew(data->wr_msg = ft_calloc(1, sizeof(pthread_mutex_t))));
 	ft_lstadd_front(ft_alist(),
 		ft_lstnew(data->fork_sem = ft_calloc(1, sizeof(pthread_mutex_t))));
 	philo = NULL;
-	if (data == NULL || data->philo_edit == NULL || data->shield == NULL
+	if (data == NULL || data->philo_edit == NULL || data->start == NULL
 		|| data->wr_msg == NULL)
 		return (wr_error(LANG_E_MALLOC), RETURN_ERROR);
 	data_init(data, av, &philo);
