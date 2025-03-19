@@ -6,20 +6,27 @@
 /*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 04:07:02 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 05:35:12 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/20 00:11:57 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-static int	ft_strlen(const char *str)
+static int	ft_strlen_skip_zero(const char *str)
 {
 	int	i;
+	int	count;
 
 	i = 0;
-	while (str[i] != '\0')
+	count = 0;
+	while (str[i] == '0' || str[i] == '+' || str[i] == '-' || str[i] != '\0')
 		i++;
-	return (i);
+	while (str[i] != '\0')
+	{
+		i++;
+		count++;
+	}
+	return (count);
 }
 
 static int	ft_isdigit(int c)
@@ -37,7 +44,7 @@ long	ft_atol(const char *str)
 	long	sign;
 	long	i;
 
-	if (!str || ft_strlen(str) >= 10)
+	if (!str || ft_strlen_skip_zero(str) > 12)
 		return (0);
 	val = 0;
 	sign = 1;
