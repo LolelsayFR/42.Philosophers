@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 05:13:49 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/26 21:10:29 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_philo
 	long				id;
 	pthread_mutex_t		*r_fork;
 	pthread_mutex_t		*l_fork;
+	struct timeval		start_time;
 	struct timeval		last_eat_time;
 	pthread_t			thread;
 	long				meal;
@@ -73,7 +74,6 @@ typedef struct s_philo_data
 	long			n_must_eat;
 	long			full_count;
 	int				was_init;
-	struct timeval	start_time;
 	int				is_finish;
 	pthread_mutex_t	*philo_edit;
 	pthread_mutex_t	*shield;
@@ -110,4 +110,6 @@ void	philo_lstiter_r_fork(t_list *lst_head, t_philo_data *data);
 int		death_check(t_philo *philo, t_philo_data *data);
 void	philo_set_status(t_philo *philo, long status, t_philo_data *data);
 void	philosleep(const int ms, t_philo *philo, t_philo_data *data);
+void	philo_launcher(t_list *lst_head, t_philo_data *data);
+
 #endif

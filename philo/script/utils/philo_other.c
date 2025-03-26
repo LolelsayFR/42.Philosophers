@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_other.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 14:17:50 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 05:09:07 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/26 21:25:17 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,8 @@ long	time_to_ms(struct timeval current_time, struct timeval start_time)
 
 int	death_check(t_philo *philo, t_philo_data *data)
 {
-	int	is_sim_finished;
-
-	pthread_mutex_lock(data->philo_edit);
-	is_sim_finished = data->is_finish;
-	pthread_mutex_unlock(data->philo_edit);
-	if (is_sim_finished)
-		return (1);
-	gettimeofday(&philo->cur_time, NULL);
-	if ((time_to_ms(philo->cur_time, data->start_time)
-			- time_to_ms(philo->last_eat_time, data->start_time))
+	if ((time_to_ms(philo->cur_time, philo->start_time)
+			- time_to_ms(philo->last_eat_time, philo->start_time))
 		>= data->ttdie)
 	{
 		philo_set_status(philo, DEAD, data);
@@ -41,16 +33,14 @@ int	death_check(t_philo *philo, t_philo_data *data)
 void	philosleep(const int ms, t_philo *philo, t_philo_data *data)
 {
 	struct timeval	start;
-	struct timeval	now;
 	long			elapsed;
 
 	gettimeofday(&start, NULL);
 	while (1)
 	{
-		gettimeofday(&philo->cur_time, NULL);
 		death_check(philo, data);
-		gettimeofday(&now, NULL);
-		elapsed = time_to_ms(now, start);
+		gettimeofday(&philo->cur_time, NULL);
+		elapsed = time_to_ms(philo->cur_time, start);
 		if (elapsed >= ms || death_check(philo, data))
 			break ;
 		usleep(50);

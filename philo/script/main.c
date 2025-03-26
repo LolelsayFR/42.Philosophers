@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaillet <emaillet@student.42lehavre.fr>   +#+  +:+       +#+        */
+/*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:08:25 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/20 00:56:44 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/26 21:21:02 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_philo	*new_philo(t_philo_data *d, t_list *philo)
 		return (NULL);
 	arg->philo->id = i;
 	pthread_mutex_init(arg->philo->l_fork, NULL);
-	pthread_create(&arg->philo->thread, NULL, (void *)philo_loop, (void *)arg);
 	if (PHILO_DEBUG)
 		printf(GRN"Philo thread %ld is created"RES, arg->philo->id);
 	return (arg->philo);
@@ -79,7 +78,6 @@ static int	data_init(t_philo_data *data, char **av, t_list **philo)
 	pthread_mutex_init(data->shield, NULL);
 	pthread_mutex_init(data->philo_edit, NULL);
 	pthread_mutex_init(data->wr_msg, NULL);
-	pthread_mutex_lock(data->philo_edit);
 	data->philo_c = ft_atol(av[1]);
 	data->fork_c = data->philo_c;
 	data->ttdie = ft_atol(av[2]);
@@ -91,10 +89,8 @@ static int	data_init(t_philo_data *data, char **av, t_list **philo)
 		ft_lstadd_front(philo, ft_lstnew(new_philo(data, *philo)));
 	if (data->fork_c > 1)
 		philo_lstiter_r_fork(*philo, data);
-	while (data->start_time.tv_usec > 200 || data->start_time.tv_usec < 50)
-		gettimeofday(&data->start_time, NULL);
 	data->was_init = 1;
-	pthread_mutex_unlock(data->philo_edit);
+	philo_launcher(*philo, data);
 	while (philo_lstiter_end(*philo, data))
 		philo_lstiter_end(*philo, data);
 	return (1);

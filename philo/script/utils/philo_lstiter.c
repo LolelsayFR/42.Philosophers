@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_lstiter.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 07:40:35 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 05:02:52 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/26 21:34:00 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,25 @@ int	philo_lstiter_end(t_list *lst_head, t_philo_data *data)
 		lst = lst->next;
 	}
 	return (full_count);
+}
+
+void	philo_launcher(t_list *lst_head, t_philo_data *data)
+{
+	t_philo		*philo;
+	t_list		*lst;
+	t_philargs	*arg;
+
+	lst = lst_head;
+	while (lst != NULL)
+	{
+		ft_lstadd_front(ft_alist(),
+			ft_lstnew(arg = ft_calloc(1, sizeof(t_philargs))));
+		arg->data = data;
+		philo = lst->content;
+		arg->philo = philo;
+		pthread_create(&arg->philo->thread,
+			NULL, (void *)philo_loop, (void *)arg);
+		usleep(ONE_MS / 5);
+		lst = lst->next;
+	}
 }
