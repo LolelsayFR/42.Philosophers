@@ -1,18 +1,18 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 07:31:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/26 21:24:12 by emaillet         ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::	  */
+/*	 philo.c											:+:		 :+:	:+:	  */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: emaillet <emaillet@student.42lehavre.fr	+#+	 +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2025/02/27 07:31:51 by emaillet		   #+#	  #+#			  */
+/*	 Updated: 2025/03/27 17:27:43 by emaillet		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_sleep(t_philo *philo, t_philo_data *data)
+void	philo_sleep(t_philo	*philo,	t_philo_data *data)
 {
 	death_check(philo, data);
 	philo_set_status(philo, SLEEP, data);
@@ -20,13 +20,13 @@ void	philo_sleep(t_philo *philo, t_philo_data *data)
 	death_check(philo, data);
 }
 
-void	philo_think(t_philo *philo, t_philo_data *data)
+void	philo_think(t_philo	*philo,	t_philo_data *data)
 {
 	philo_set_status(philo, THINK, data);
 	death_check(philo, data);
 }
 
-static void	philo_take_fork(t_philo *philo, t_philo_data *data)
+static void	philo_take_fork(t_philo	*philo,	t_philo_data *data)
 {
 	if (philo->id % 2 == 1)
 	{
@@ -44,23 +44,26 @@ static void	philo_take_fork(t_philo *philo, t_philo_data *data)
 		pthread_mutex_lock(philo->l_fork);
 		philo_set_status(philo, TAKE_FORK, data);
 	}
+	gettimeofday(&philo->last_update_time, NULL);
 }
 
-void	*philo_eat(t_philo *philo, t_philo_data *data)
+void	*philo_eat(t_philo *philo, t_philo_data	*data)
 {
 	if (data->fork_c == 1)
 		return (philosleep(data->ttdie, philo, data), NULL);
 	philo_take_fork(philo, data);
 	philo_set_status(philo, EAT, data);
 	pthread_mutex_lock(data->shield);
-	pthread_mutex_unlock(data->shield);
 	gettimeofday(&philo->last_eat_time, NULL);
+	pthread_mutex_unlock(data->shield);
 	philosleep(data->tteat, philo, data);
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_lock(&philo->state_mutex);
 	philo->meal++;
 	if (philo->meal == data->n_must_eat)
 		philo->isfull = 1;
+	pthread_mutex_unlock(&philo->state_mutex);
 	if (PHILO_DEBUG && philo->meal == data->n_must_eat)
 		printf("Philo number %ld is full after %ld meal\n",
 			philo->id, philo->meal);
@@ -71,24 +74,24 @@ void	*philo_loop(t_philargs *arg)
 {
 	long	is_sim_finished;
 
-	gettimeofday(&arg->philo->cur_time, NULL);
-	gettimeofday(&arg->philo->last_eat_time, NULL);
-	gettimeofday(&arg->philo->start_time, NULL);
 	is_sim_finished = 0;
 	if (PHILO_DEBUG)
-		printf("Philo %ld enter the routine\n", arg->philo->id);
+		printf("Philo %ld enter	the routine\n", arg->philo->id);
 	while (!is_sim_finished || !arg->philo->isdead || !arg->philo->isfull)
 	{
 		pthread_mutex_lock(arg->data->philo_edit);
 		is_sim_finished = arg->data->is_finish;
 		pthread_mutex_unlock(arg->data->philo_edit);
 		philo_eat(arg->philo, arg->data);
+		gettimeofday(&arg->philo->last_update_time, NULL);
 		if (arg->philo->isdead || arg->philo->isfull || is_sim_finished)
 			return (arg);
 		philo_think(arg->philo, arg->data);
+		gettimeofday(&arg->philo->last_update_time, NULL);
 		if (arg->philo->isdead || arg->philo->isfull || is_sim_finished)
 			return (arg);
 		philo_sleep(arg->philo, arg->data);
+		gettimeofday(&arg->philo->last_update_time, NULL);
 	}
 	if (PHILO_DEBUG)
 		printf("Philo %ld exit the routine\n", arg->philo->id);

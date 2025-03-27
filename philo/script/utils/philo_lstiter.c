@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo_lstiter.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 07:40:35 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/26 21:34:00 by emaillet         ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::	  */
+/*	 philo_lstiter.c									:+:		 :+:	:+:	  */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: emaillet <emaillet@student.42lehavre.fr	+#+	 +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2025/02/27 07:40:35 by emaillet		   #+#	  #+#			  */
+/*	 Updated: 2025/03/27 17:28:42 by emaillet		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
 #include "../philo.h"
@@ -21,12 +21,12 @@ void	philo_lstiter_pthj(t_list *lst)
 		philo = (t_philo *)lst->content;
 		pthread_join(philo->thread, NULL);
 		if (PHILO_DEBUG)
-			printf(RED"Philo thread %ld is join"RES, philo->id);
+			printf(RED"Philo thread	%ld	is join"RES, philo->id);
 		lst = lst->next;
 	}
 }
 
-void	philo_lstiter_r_fork(t_list *lst_head, t_philo_data *data)
+void	philo_lstiter_r_fork(t_list	*lst_head, t_philo_data	*data)
 {
 	t_philo	*philo;
 	t_philo	*philo_n;
@@ -49,26 +49,27 @@ void	philo_lstiter_r_fork(t_list *lst_head, t_philo_data *data)
 	}
 }
 
-int	philo_lstiter_end(t_list *lst_head, t_philo_data *data)
+int	philo_lstiter_end(t_list *lst_head,	t_philo_data *data)
 {
 	t_philo	*philo;
 	t_list	*lst;
 	int		full_count;
 
+	(void)data;
 	full_count = 0;
 	lst = lst_head;
 	while (lst)
 	{
 		philo = lst->content;
-		pthread_mutex_lock(data->shield);
+		pthread_mutex_lock(&philo->state_mutex);
 		if (philo->isdead == 1)
 		{
-			pthread_mutex_unlock(data->shield);
+			pthread_mutex_unlock(&philo->state_mutex);
 			return (0);
 		}
 		if (!philo->isfull)
 			full_count = 1;
-		pthread_mutex_unlock(data->shield);
+		pthread_mutex_unlock(&philo->state_mutex);
 		lst = lst->next;
 	}
 	return (full_count);
@@ -88,6 +89,10 @@ void	philo_launcher(t_list *lst_head, t_philo_data *data)
 		arg->data = data;
 		philo = lst->content;
 		arg->philo = philo;
+		gettimeofday(&arg->philo->cur_time, NULL);
+		gettimeofday(&arg->philo->last_eat_time, NULL);
+		gettimeofday(&arg->philo->start_time, NULL);
+		gettimeofday(&arg->philo->last_update_time, NULL);
 		pthread_create(&arg->philo->thread,
 			NULL, (void *)philo_loop, (void *)arg);
 		usleep(ONE_MS / 5);

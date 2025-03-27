@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/26 21:10:29 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:06:37 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@
 //Set Struct
 typedef struct s_philo
 {
-	struct timeval		cur_time;
 	long				status;
 	int					starve;
 	long				id;
@@ -51,7 +50,10 @@ typedef struct s_philo
 	pthread_mutex_t		*l_fork;
 	struct timeval		start_time;
 	struct timeval		last_eat_time;
+	struct timeval		last_update_time;
+	struct timeval		cur_time;
 	pthread_t			thread;
+	pthread_mutex_t		state_mutex;
 	long				meal;
 	int					isfull;
 	int					isdead;
@@ -100,7 +102,9 @@ void	wr_error(char *str);
 void	wr_philo_msg(t_philo *philo, t_philo_data *data, int status);
 long	time_to_ms(struct timeval current_time, struct timeval start_time);
 t_philo	*get_philo(long id, t_philo_data *d);
-
+void	ft_alist_add_back(void *content);
+void	ft_alist_add_front(void *content);
+void	ft_alist_free(void);
 //Philo function
 void	data_free(t_philo_data *data, t_list *philo);
 void	*philo_loop(t_philargs *arg);
