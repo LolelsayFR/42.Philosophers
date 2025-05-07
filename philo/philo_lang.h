@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_lang.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 07:27:33 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/12 05:39:54 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:39:50 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@
 
 //Philo messages
 # define L_TIME	"⌚ \x1b[2;29m[ %10ldMS ]\x1b[0m "
-# define L_P_TH	"\x1b[48;2;100;0;150;1m Philo %3ld \x1b[0m is thinking 🧠"
-# define L_P_TF	"\x1b[48;2;120;120;20;1m Philo %3ld \x1b[0m has taken a fork 🍴"
-# define L_P_SL	"\x1b[48;2;0;0;160;1m Philo %3ld \x1b[0m is sleeping 💤"
-# define L_P_EA	"\x1b[48;2;120;50;10;1m Philo %3ld \x1b[0m is eating 🍗"
-# define L_P_DI	"\x1b[48;2;160;0;0;1m Philo %3ld \x1b[0m died 💀"
+# define L_P_TH	"\x1b[48;2;100;0;150;1m Philo %d \x1b[0m is thinking 🧠"
+# define L_P_TF	"\x1b[48;2;120;120;20;1m Philo %d \x1b[0m has taken a fork 🍴"
+# define L_P_SL	"\x1b[48;2;0;0;160;1m Philo %d \x1b[0m is sleeping 💤"
+# define L_P_EA	"\x1b[48;2;120;50;10;1m Philo %d \x1b[0m is eating 🍗"
+# define L_P_DI	"\x1b[48;2;160;0;0;1m Philo %d \x1b[0m died 💀"
+
 #endif

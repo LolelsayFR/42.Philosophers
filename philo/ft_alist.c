@@ -6,11 +6,11 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 11:04:14 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/27 18:31:40 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:42:21 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philo.h"
+#include "philo.h"
 
 t_list	**ft_alist(void)
 {
@@ -21,10 +21,13 @@ t_list	**ft_alist(void)
 	return (&alloc);
 }
 
-static void	nufree(void *ptr)
+t_phdata	*get_data(void)
 {
-	free(ptr);
-	ptr = NULL;
+	static t_phdata	*data = NULL;
+
+	if (data == NULL)
+		ft_alist_add_back(data = ft_calloc(1, sizeof(t_phdata)));
+	return (data);
 }
 
 void	ft_alist_free(void)
@@ -32,15 +35,10 @@ void	ft_alist_free(void)
 	t_list	**lst;
 
 	lst = ft_alist();
-	ft_lstclear(lst, nufree);
+	ft_lstclear(lst, free);
 }
 
 void	ft_alist_add_back(void *content)
 {
 	ft_lstadd_back(ft_alist(), ft_lstnew(content));
-}
-
-void	ft_alist_add_front(void *content)
-{
-	ft_lstadd_front(ft_alist(), ft_lstnew(content));
 }

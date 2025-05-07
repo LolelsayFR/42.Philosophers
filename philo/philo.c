@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 23:28:37 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/20 03:39:34 by emaillet         ###   ########.fr       */
+/*   Created: 2025/05/07 16:12:47 by emaillet          #+#    #+#             */
+/*   Updated: 2025/05/07 16:41:25 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philo.h"
+#include "philo.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void*))
+void	*philo_loop(t_philo *philo)
 {
-	t_list	*tmp;
-
-	if (!del || !*lst)
-		return ;
-	while (*lst)
-	{
-		tmp = (*lst)->next;
-		ft_lstdelone(*lst, del);
-		*lst = tmp;
-	}
+	printf(YEL"Welcome Philo id : %d"RES, philo->id);
+	return (NULL);
 }

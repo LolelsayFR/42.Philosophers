@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 23:29:03 by emaillet          #+#    #+#             */
-/*   Updated: 2025/03/27 15:54:57 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:49:28 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philo.h"
+#include "philo.h"
 
 t_list	*ft_lstnew(void *content)
 {
@@ -23,3 +23,27 @@ t_list	*ft_lstnew(void *content)
 	dst -> next = NULL;
 	return (dst);
 }
+
+//#include <stdio.h>
+//
+//void	ft_lstprint(t_list *liste)
+//{
+//	t_list	*tmp;
+//
+//	tmp = liste;
+//	while (tmp != NULL)
+//	{
+//		printf("%s -> ", (char *)tmp->content);
+//		tmp = tmp->next;
+//	}
+//	printf("NULL\n");
+//}
+//
+//int	main(int argc, char *argv[])
+//{
+//	if (argc == 2)
+//	{
+//		ft_lstprint(ft_lstnew(ft_strdup(argv[1])));
+//	}
+//	return (0);
+//}

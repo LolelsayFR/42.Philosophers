@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
+/*   ft_freetab.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emaillet <emaillet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 23:28:26 by emaillet          #+#    #+#             */
-/*   Updated: 2025/02/20 03:39:34 by emaillet         ###   ########.fr       */
+/*   Created: 2025/01/19 03:37:46 by emaillet          #+#    #+#             */
+/*   Updated: 2025/05/06 09:48:26 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philo.h"
+#include "philo.h"
 
-void	ft_lstadd_front(t_list **lst, t_list *lnew)
+int	ft_freetab(void **tab)
 {
-	if (!lst || !lnew)
-		return ;
-	lnew -> next = *lst;
-	*lst = lnew;
+	int	i;
+
+	i = 0;
+	if (tab == NULL)
+		return (RETURN_ERROR);
+	while (tab[i] != NULL)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+	return (i);
 }
