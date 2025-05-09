@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/07 16:40:23 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:51:53 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,13 @@ typedef struct s_philo
 {
 	pthread_t		thread;
 	int				id;
+	int				id_next_fork;
 	int				status;
 	bool			is_alive;
 	bool			is_full;
-	struct timeval	last_time;
+	struct timeval	last_update;
+	struct timeval	last_eat;
+	struct s_phdata	*data;
 }	t_philo;
 
 typedef struct s_phdata
@@ -75,6 +78,11 @@ typedef struct s_phdata
 }	t_phdata;
 
 /* FUNCTIONS */
+void		philo_set_status(t_philo *philo, long status, t_phdata *data);
+void		wr_philo_msg(t_philo *philo, t_phdata *data, int status);
+void		ms_sleep(const int ms, t_philo *philo);
+bool		death_check(t_philo *philo);
+long		time_to_ms(struct timeval current_time, struct timeval start_time);
 void		*philo_loop(t_philo *philo);
 t_phdata	*get_data(void);
 void		ft_lstadd_back(t_list **lst, t_list *lnew);

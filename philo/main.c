@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:18:28 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/07 16:42:29 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:08:24 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ static bool	data_checker(t_phdata *data, char **av)
 	else
 		data->n_must_eat = -1;
 	if (data->n_philo <= 0 || data->n_philo > 200)
-		return (ft_alist_free(), ft_putendl_fd(LANG_E_IPA, 2), false);
+		return (ft_alist_free(), ft_putendl_fd(LANG_E LANG_E_IPA, 2), false);
 	if (data->ttdie <= 0 || data->ttdie > INT_MAX)
-		return (ft_alist_free(), ft_putendl_fd(LANG_E_TTD, 2), false);
+		return (ft_alist_free(), ft_putendl_fd(LANG_E LANG_E_TTD, 2), false);
 	if (data->tteat <= 0 || data->tteat > INT_MAX)
-		return (ft_alist_free(), ft_putendl_fd(LANG_E_TTE, 2), false);
+		return (ft_alist_free(), ft_putendl_fd(LANG_E LANG_E_TTE, 2), false);
 	if (data->ttsleep <= 0 || data->ttsleep > INT_MAX)
-		return (ft_alist_free(), ft_putendl_fd(LANG_E_TTS, 2), false);
+		return (ft_alist_free(), ft_putendl_fd(LANG_E LANG_E_TTS, 2), false);
 	return (1);
 }
 
@@ -53,16 +53,21 @@ static void	philo_tab_launcher(int i, t_phdata *data)
 	{
 		ft_alist_add_back(data->philo[i] = ft_calloc(1, sizeof(t_philo)));
 		data->philo[i]->id = i;
+		data->philo[i]->data = data;
+		data->philo[i]->is_alive = true;
+		data->philo[i]->is_full = false;
+		if (PHILO_DEBUG)
+			printf("Thread id %d is created\n", i);
 		pthread_create(&data->philo[i]->thread,
 			NULL, (void *)philo_loop, (void *)data->philo[i]);
-		printf("Thread id %d is created\n", i);
 		i--;
 	}
 	i = 0;
 	while (i < data->n_philo)
 	{
 		pthread_join(data->philo[i]->thread, NULL);
-		printf("Thread id %d is join\n", i);
+		if (PHILO_DEBUG)
+			printf("Thread id %d is join\n", i);
 		i++;
 	}
 }
@@ -87,12 +92,13 @@ int	main(int ac, char **av)
 	t_phdata	*data;
 
 	if (ac < 5 || ac > 6)
-		return (ft_putendl_fd(LANG_E_ARG, 2), RETURN_ERROR);
+		return (ft_putendl_fd(LANG_E LANG_E_ARG, 2), RETURN_ERROR);
 	data = get_data();
 	if (data == NULL)
-		return (ft_putendl_fd(LANG_E_MALLOC, 2), RETURN_ERROR);
+		return (ft_putendl_fd(LANG_E LANG_E_MALLOC, 2), RETURN_ERROR);
 	if (data_init(data, av) == false)
 		return (RETURN_ERROR);
+	data->is_running = true;
 	philo_tab_launcher(data->n_philo, data);
 	ft_alist_free();
 	return (RETURN_SUCCESS);
