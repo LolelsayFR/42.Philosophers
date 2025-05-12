@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/12 10:35:49 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:21:59 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_phdata
 {
 	bool			was_init;
 	bool			is_running;
+	bool			can_write;
 	int				n_fork;
 	int				n_philo;
 	int				ttdie;
@@ -79,6 +80,7 @@ typedef struct s_phdata
 	pthread_t		monitor;
 	pthread_mutex_t	**phforks;
 	pthread_mutex_t	*monilock;
+	pthread_mutex_t	*write;
 }	t_phdata;
 
 /* FUNCTIONS */

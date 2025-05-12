@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:45:59 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/12 11:25:20 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:52:15 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	wr_philo_msg(t_philo *philo, t_phdata *data, int status)
 {
+	pthread_mutex_unlock(philo->data->write);
 	if (philo->is_alive == false)
 		return ;
 	pthread_mutex_lock(philo->set_status);
@@ -38,7 +39,11 @@ void	philo_set_status(t_philo *philo, int status, t_phdata *data)
 {
 	gettimeofday(&philo->cur_time, NULL);
 	gettimeofday(&philo->last_update, NULL);
-	wr_philo_msg(philo, data, status);
+	pthread_mutex_lock(philo->data->write);
+	if (philo->data->can_write == true)
+		wr_philo_msg(philo, data, status);
+	else
+		pthread_mutex_unlock(philo->data->write);
 	if (status != TAKE_FORK && philo->status != DEAD)
 	{
 		pthread_mutex_lock(philo->set_status);
@@ -60,9 +65,12 @@ bool	death_check(t_philo *philo)
 			return (true);
 		pthread_mutex_lock(philo->set_status);
 		pthread_mutex_lock(philo->data->monilock);
+		pthread_mutex_lock(philo->data->write);
 		if (philo->data->is_running == true)
 			printf(L_TIME L_P_DI"\n",
 				time_to_ms(philo->cur_time, philo->data->start), philo->id + 1);
+		philo->data->can_write = false;
+		pthread_mutex_unlock(philo->data->write);
 		pthread_mutex_unlock(philo->data->monilock);
 		philo->status = DEAD;
 		philo->is_alive = false;

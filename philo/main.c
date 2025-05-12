@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:18:28 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/12 12:28:36 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:48:21 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ static pthread_mutex_t	**fork_tab_creator(int i, t_phdata *data)
 	}
 	ft_alist_add_back(data->monilock = ft_calloc(1, sizeof(pthread_mutex_t)));
 	pthread_mutex_init(data->monilock, NULL);
+	ft_alist_add_back(data->write = ft_calloc(1, sizeof(pthread_mutex_t)));
+	pthread_mutex_init(data->write, NULL);
 	return (result);
 }
 
@@ -84,6 +86,7 @@ static bool	data_init(t_phdata *data, char **av)
 	if (data_checker(data, av) == false)
 		return (false);
 	data->was_init = true;
+	data->can_write = true;
 	return (true);
 }
 

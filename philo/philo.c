@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:12:47 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/12 11:03:50 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:18:37 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,12 @@ static void	philo_sleep(t_philo *philo, t_phdata *data)
 	death_check(philo);
 	philo_set_status(philo, SLEEP, data);
 	ms_sleep(data->ttsleep, philo);
-	death_check(philo);
 }
 
 static void	philo_think(t_philo *philo, t_phdata *data)
 {
 	death_check(philo);
 	philo_set_status(philo, THINK, data);
-	death_check(philo);
 }
 
 static void	philo_take_fork(t_philo *philo, t_phdata *data)
