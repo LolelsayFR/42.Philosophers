@@ -37,7 +37,7 @@ Le projet "Philosopher" fait partie du cursus de 42. Il a pour but d'implémente
 
 3. **Exécuter le programme :**
    ```bash
-   ./philosophers <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]
+   ./philo <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]
    ```
 
    - **Arguments :**
@@ -85,7 +85,7 @@ The "Philosopher" project is part of the 42 curriculum. Its goal is to implement
 
 3. **Run the program:**
    ```bash
-   ./philosophers <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]
+   ./philo <number_of_philosophers> <time_to_die> <time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]
    ```
 
    - **Arguments:**
