@@ -3,7 +3,20 @@ D_NAME			=	d_philo
 T_NAME			=	d_philo_tsan
 A_NAME			=	d_philo_asan
 
-SRC				=	$(wildcard *.c)
+SRC				=	ft_alist.c\
+					ft_atol.c\
+					ft_calloc.c\
+					ft_freetab.c\
+					ft_lstadd_back_bonus.c\
+					ft_lstclear_bonus.c\
+					ft_lstdelone_bonus.c\
+					ft_lstnew_bonus.c\
+					ft_putendl_fd.c\
+					main.c\
+					monitor.c\
+					philo.c\
+					time.c\
+					tools.c\
 
 CFLAGS			=	-Wall -Werror -Wextra -pthread -g
 DATA_RACE_FLAGS	=	-Wall -Werror -Wextra -pthread -fsanitize=thread
@@ -20,7 +33,6 @@ debug: d_info ${SRC}
 
 hello:
 	@echo "\e[48;2;100;0;100;1m	Welcome	to Philo Makefile !\e[0m\n"
-	@echo "\e[48;2;100;0;0;1m	WILDCARD !!!!!!!!!!!!!!!!!!!!!!!!!!!!\e[0m\n"
 
 info: hello
 	@echo "\e[48;2;70;70;70;1m Philo usage : \e[0m\n"
