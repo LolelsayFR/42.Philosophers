@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/09 14:51:53 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/12 10:35:49 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,17 @@ typedef struct s_list
 
 typedef struct s_philo
 {
+	pthread_mutex_t	*set_status;
 	pthread_t		thread;
 	int				id;
 	int				id_next_fork;
 	int				status;
+	int				n_meal;
 	bool			is_alive;
 	bool			is_full;
 	struct timeval	last_update;
 	struct timeval	last_eat;
+	struct timeval	cur_time;
 	struct s_phdata	*data;
 }	t_philo;
 
@@ -71,14 +74,16 @@ typedef struct s_phdata
 	int				tteat;
 	int				ttsleep;
 	int				n_must_eat;
-	struct timeval	start_time;
-	pthread_mutex_t	**phforks;
+	struct timeval	start;
 	t_philo			**philo;
 	pthread_t		monitor;
+	pthread_mutex_t	**phforks;
+	pthread_mutex_t	*monilock;
 }	t_phdata;
 
 /* FUNCTIONS */
-void		philo_set_status(t_philo *philo, long status, t_phdata *data);
+void		monitor(t_phdata *data);
+void		philo_set_status(t_philo *philo, int status, t_phdata *data);
 void		wr_philo_msg(t_philo *philo, t_phdata *data, int status);
 void		ms_sleep(const int ms, t_philo *philo);
 bool		death_check(t_philo *philo);
