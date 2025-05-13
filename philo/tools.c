@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:45:59 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/12 13:52:15 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:27:38 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ bool	death_check(t_philo *philo)
 		pthread_mutex_lock(philo->set_status);
 		pthread_mutex_lock(philo->data->monilock);
 		pthread_mutex_lock(philo->data->write);
-		if (philo->data->is_running == true)
+		if (philo->data->is_running == true && philo->data->can_write == true)
 			printf(L_TIME L_P_DI"\n",
 				time_to_ms(philo->cur_time, philo->data->start), philo->id + 1);
 		philo->data->can_write = false;
