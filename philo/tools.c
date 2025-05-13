@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:45:59 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/13 09:01:53 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:34:30 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ void	wr_philo_msg(t_philo *philo, t_phdata *data, int status)
 		return ;
 	pthread_mutex_lock(philo->set_status);
 	pthread_mutex_lock(data->monilock);
-	if (status == SLEEP && data->is_running && !philo->is_full)
+	if (status == SLEEP && data->is_running)
 		printf(L_TIME L_P_SL"\n",
 			time_to_ms(philo->last_update, philo->data->start), philo->id + 1);
-	else if (status == THINK && data->is_running && !philo->is_full)
+	else if (status == THINK && data->is_running)
 		printf(L_TIME L_P_TH"\n",
 			time_to_ms(philo->last_update, philo->data->start), philo->id + 1);
-	else if (status == TAKE_FORK && data->is_running && !philo->is_full)
+	else if (status == TAKE_FORK && data->is_running)
 		printf(L_TIME L_P_TF"\n",
 			time_to_ms(philo->last_update, philo->data->start), philo->id + 1);
-	else if (status == EAT && data->is_running && !philo->is_full)
+	else if (status == EAT && data->is_running)
 		printf(L_TIME L_P_EA"\n",
 			time_to_ms(philo->last_update, philo->data->start), philo->id + 1);
 	pthread_mutex_unlock(data->monilock);
