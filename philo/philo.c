@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:12:47 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/13 09:00:57 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:05:04 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,12 @@ void	*philo_loop(t_philo *philo)
 	else
 		philo->id_next_fork = philo->id + 1;
 	pthread_mutex_lock(philo->data->monilock);
-	while (philo->is_alive && !philo->is_full && philo->data->is_running)
+	while (philo->is_alive && philo->data->is_running)
 	{
 		pthread_mutex_unlock(philo->data->monilock);
 		philo_eat(philo, philo->data);
 		pthread_mutex_lock(philo->data->monilock);
-		if (!philo->is_alive || philo->is_full || !philo->data->is_running)
+		if (!philo->is_alive || !philo->data->is_running)
 			break ;
 		pthread_mutex_unlock(philo->data->monilock);
 		philo_sleep(philo, philo->data);
