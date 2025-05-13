@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:18:28 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/12 13:48:21 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/13 09:22:10 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,10 @@ static pthread_mutex_t	**fork_tab_creator(int i, t_phdata *data)
 	while (i >= 0)
 	{
 		ft_alist_add_back(result[i] = ft_calloc(1, sizeof(pthread_mutex_t)));
-		pthread_mutex_init(result[i], NULL);
 		i--;
 	}
 	ft_alist_add_back(data->monilock = ft_calloc(1, sizeof(pthread_mutex_t)));
-	pthread_mutex_init(data->monilock, NULL);
 	ft_alist_add_back(data->write = ft_calloc(1, sizeof(pthread_mutex_t)));
-	pthread_mutex_init(data->write, NULL);
 	return (result);
 }
 
@@ -63,7 +60,6 @@ static void	philo_tab_launcher(int i, t_phdata *data)
 		data->philo[i]->is_full = false;
 		ft_alist_add_back(data->philo[i]->set_status
 			= ft_calloc(1, sizeof(pthread_mutex_t)));
-		pthread_mutex_init(data->philo[i]->set_status, NULL);
 		if (PHILO_DEBUG)
 			printf("Thread id %d is created\n", i);
 		pthread_create(&data->philo[i]->thread,

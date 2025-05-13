@@ -19,8 +19,8 @@ SRC				=	ft_alist.c\
 					tools.c\
 
 CFLAGS			=	-Wall -Werror -Wextra -pthread -g
-DATA_RACE_FLAGS	=	-Wall -Werror -Wextra -pthread -fsanitize=thread
-ADDRESS_FLAGS	=	-Wall -Werror -Wextra -pthread -fsanitize=address
+DATA_RACE_FLAGS	=	-Wall -Werror -Wextra -g -fsanitize=thread
+ADDRESS_FLAGS	=	-Wall -Werror -Wextra -g -fsanitize=address
 
 all:	$(NAME)	info
 

@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:45:59 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/12 14:27:38 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/13 09:01:53 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ bool	death_check(t_philo *philo)
 	gettimeofday(&philo->cur_time, NULL);
 	if ((time_to_ms(philo->cur_time, philo->data->start)
 			- time_to_ms(philo->last_eat, philo->data->start))
-		>= philo->data->ttdie)
+		> philo->data->ttdie)
 	{
 		if (philo->status == DEAD)
 			return (true);
