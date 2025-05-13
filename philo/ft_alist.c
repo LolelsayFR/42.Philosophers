@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 11:04:14 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/07 16:42:21 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:32:38 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,6 @@ t_list	**ft_alist(void)
 	if (alloc == NULL)
 		alloc = ft_calloc(1, sizeof(t_list));
 	return (&alloc);
-}
-
-t_phdata	*get_data(void)
-{
-	static t_phdata	*data = NULL;
-
-	if (data == NULL)
-		ft_alist_add_back(data = ft_calloc(1, sizeof(t_phdata)));
-	return (data);
 }
 
 void	ft_alist_free(void)

@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/13 09:44:08 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:32:19 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void		ms_sleep(const int ms, t_philo *philo);
 bool		death_check(t_philo *philo);
 long		time_to_ms(struct timeval current_time, struct timeval start_time);
 void		*philo_loop(t_philo *philo);
-t_phdata	*get_data(void);
 void		ft_lstadd_back(t_list **lst, t_list *lnew);
 void		ft_lstclear(t_list **lst, void (*del)(void*));
 void		ft_lstdelone(t_list *lst, void (*del)(void*));

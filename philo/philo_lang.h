@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 07:27:33 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/12 14:55:58 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:45:17 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define LANG_E_TTD		"\x1b[31mInvalid Time to die Arg (2) 💀\n\x1b[0m"
 # define LANG_E_TTE		"\x1b[31mInvalid Time to eat Arg (3) 🍗\n\x1b[0m"
 # define LANG_E_TTS		"\x1b[31mInvalid Time to sleep Arg (4) 💤\n\x1b[0m"
+# define LANG_E_NME		"\x1b[31mInvalid numbers of meal Arg (5) 🍴\n\x1b[0m"
 # define LANG_E_ARG		"\x1b[31mInvalid Args count 🧐\n\x1b[0m"
 
 //Set warn messages

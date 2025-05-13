@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:18:28 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/13 09:22:10 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:44:15 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static bool	data_checker(t_phdata *data, char **av)
 	if (av[5] != NULL && av[5][0] != '\0' && ft_atol(av[5]) > 0
 		&& ft_atol(av[5]) < LONG_MAX)
 		data->n_must_eat = ft_atol(av[5]);
+	else if (av[5] != NULL && ft_atol(av[5]) <= 0)
+		return (ft_alist_free(), ft_putendl_fd(LANG_E LANG_E_NME, 2), false);
 	else
 		data->n_must_eat = -1;
 	if (data->n_philo <= 0)
@@ -93,7 +95,7 @@ int	main(int ac, char **av)
 
 	if (ac < 5 || ac > 6)
 		return (ft_putendl_fd(LANG_E LANG_E_ARG, 2), RETURN_ERROR);
-	data = get_data();
+	ft_alist_add_back(data = ft_calloc(1, sizeof(t_phdata)));
 	if (data == NULL)
 		return (ft_putendl_fd(LANG_E LANG_E_MALLOC, 2), RETURN_ERROR);
 	if (data_init(data, av) == false)
