@@ -22,13 +22,15 @@ CFLAGS			=	-Wall -Werror -Wextra -pthread -g
 DATA_RACE_FLAGS	=	-Wall -Werror -Wextra -pthread -g -fsanitize=thread
 ADDRESS_FLAGS	=	-Wall -Werror -Wextra -pthread -g -fsanitize=address
 
+OBJ		= 	${SRC:.c=.o}
+
 all:	$(NAME)	info
 
-debug: d_info ${SRC}
+debug: d_info ${OBJ}
 	@echo "\e[48;2;0;155;0;1m Compile debug Philo \e[0m\n"
-	cc ${SRC} ${DATA_RACE_FLAGS} -o $(T_NAME)
-	cc ${SRC} ${ADDRESS_FLAGS} -o $(A_NAME)
-	cc ${SRC} -D PHILO_DEBUG=1 ${CFLAGS} -o $(D_NAME)
+	cc ${OBJ} ${DATA_RACE_FLAGS} -o $(T_NAME)
+	cc ${OBJ} ${ADDRESS_FLAGS} -o $(A_NAME)
+	cc ${OBJ} -D PHILO_DEBUG=1 ${CFLAGS} -o $(D_NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
 
 hello:
@@ -42,19 +44,28 @@ d_info:	hello
 	@echo "\e[48;2;70;70;70;1m Philo usage : \e[0m\n"
 	@echo "./d_philo <number_of_philosophers> <time_to_die>	<time_to_eat> <time_to_sleep> [number_of_times_each_philosopher_must_eat]\n"
 
-$(NAME): ${SRC}
+$(NAME): ${OBJ}
 	@echo "\e[48;2;0;155;0;1m Compile Philo	\e[0m\n"
-	cc ${SRC} ${CFLAGS}	-o $(NAME)
+	cc ${OBJ} ${CFLAGS}	-o $(NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
 
-better: ${SRC}
+better: ${OBJ}
 	@echo "\e[48;2;0;155;0;1m Update Philo to better print \e[0m\n"
-	cc ${SRC} -D PHILO_BETTER=1  ${CFLAGS}	-o $(NAME)
+	cc ${OBJ} -D PHILO_BETTER=1  ${CFLAGS}	-o $(NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
+
+clean:	hello
+	@echo "\e[48;2;155;100;0;1m	Uninstall Philo dependencies	\e[0m\n"
+	$(RM) $(OBJ)
+	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
+
 fclean:	hello clean
 	@echo "\e[48;2;155;100;0;1m	Uninstall Philo	\e[0m\n"
 	$(RM) $(NAME) $(D_NAME)	$(T_NAME) $(A_NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
+
+%.o: %.c
+	cc ${CFLAGS} -c $< -o $@
 
 re:	fclean all
 
