@@ -34,7 +34,7 @@ debug: d_info ${OBJ}
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
 
 hello:
-	@echo "\e[48;2;100;0;100;1m	Welcome	to Philo Makefile !\e[0m\n"
+	@echo "\e[48;2;100;0;100;1m Welcome to Philo Makefile !\e[0m\n"
 
 info: hello
 	@echo "\e[48;2;70;70;70;1m Philo usage : \e[0m\n"
