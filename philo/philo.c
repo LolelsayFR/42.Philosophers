@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:12:47 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/15 15:43:09 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:08:15 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,18 @@ static void	*philo_eat(t_philo *philo, t_phdata *data)
 	if (philo->is_alive == false)
 		return (NULL);
 	philo_set_status(philo, EAT, data);
-	gettimeofday(&philo->last_eat, NULL);
-	ms_sleep(data->tteat, philo);
 	philo->n_meal++;
 	if (philo->n_meal >= data->n_must_eat && data->n_must_eat != -1)
 	{
 		pthread_mutex_lock(philo->set_status);
-		philo->is_full = true;
 		pthread_mutex_unlock(philo->set_status);
 		pthread_mutex_lock(philo->data->monilock);
 		if (philo->n_meal == data->n_must_eat)
 			philo->data->full_count++;
 		pthread_mutex_unlock(philo->data->monilock);
 	}
+	gettimeofday(&philo->last_eat, NULL);
+	ms_sleep(data->tteat, philo);
 	if (PHILO_DEBUG && philo->n_meal == data->n_must_eat)
 		printf("Philo %d is full\n", philo->id + 1);
 	pthread_mutex_unlock(data->phforks[philo->id]);

@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 09:44:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/15 15:55:02 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:07:26 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ void	monitor(t_phdata *data)
 			data->is_running = false;
 			if (PHILO_DEBUG)
 				printf("ENDING BY MONITOR\n");
-			pthread_mutex_unlock(data->monilock);
 			pthread_mutex_lock(data->write);
 			data->can_write = false;
 			pthread_mutex_unlock(data->write);
+			pthread_mutex_unlock(data->monilock);
 			return ;
 		}
 		pthread_mutex_unlock(data->monilock);

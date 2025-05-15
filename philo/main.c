@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:18:28 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/15 15:16:25 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:14:34 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static void	philo_tab_launcher(int i, t_phdata *data)
 		data->philo[i]->id = i;
 		data->philo[i]->data = data;
 		data->philo[i]->is_alive = true;
-		data->philo[i]->is_full = false;
 		ft_alist_add_back(data->philo[i]->set_status
 			= ft_calloc(1, sizeof(pthread_mutex_t)));
 		if (PHILO_DEBUG)
@@ -81,7 +80,6 @@ static bool	data_init(t_phdata *data, char **av)
 	data->phforks = fork_tab_creator(data->n_fork, data);
 	if (data_checker(data, av) == false)
 		return (false);
-	data->was_init = true;
 	data->can_write = true;
 	return (true);
 }

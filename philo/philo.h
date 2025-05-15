@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/15 15:43:07 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:14:42 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct s_philo
 	int				status;
 	int				n_meal;
 	bool			is_alive;
-	bool			is_full;
 	struct timeval	last_update;
 	struct timeval	last_eat;
 	struct timeval	cur_time;
@@ -65,7 +64,6 @@ typedef struct s_philo
 
 typedef struct s_phdata
 {
-	bool			was_init;
 	bool			is_running;
 	bool			can_write;
 	int				n_fork;
