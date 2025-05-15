@@ -28,9 +28,9 @@ all:	$(NAME)	info
 
 debug: d_info ${OBJ}
 	@echo "\e[48;2;0;155;0;1m Compile debug Philo \e[0m\n"
-	cc ${OBJ} ${DATA_RACE_FLAGS} -o $(T_NAME)
-	cc ${OBJ} ${ADDRESS_FLAGS} -o $(A_NAME)
-	cc ${OBJ} -D PHILO_DEBUG=1 ${CFLAGS} -o $(D_NAME)
+	cc ${SRC} ${DATA_RACE_FLAGS} -D PHILO_BETTER=1  -o $(T_NAME)
+	cc ${SRC} ${ADDRESS_FLAGS} -D PHILO_BETTER=1 -o $(A_NAME)
+	cc ${SRC} -D PHILO_DEBUG=1 -D PHILO_BETTER=1 ${CFLAGS} -o $(D_NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
 
 hello:
@@ -51,7 +51,7 @@ $(NAME): ${OBJ}
 
 better: ${OBJ}
 	@echo "\e[48;2;0;155;0;1m Update Philo to better print \e[0m\n"
-	cc ${OBJ} -D PHILO_BETTER=1  ${CFLAGS}	-o $(NAME)
+	cc ${SRC} -D PHILO_BETTER=1  ${CFLAGS}	-o $(NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
 
 clean:	hello

@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:18:28 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/13 13:44:15 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:16:25 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,12 @@ static void	philo_tab_launcher(int i, t_phdata *data)
 		ft_alist_add_back(data->philo[i]->set_status
 			= ft_calloc(1, sizeof(pthread_mutex_t)));
 		if (PHILO_DEBUG)
-			printf("Thread id %d is created\n", i);
+			printf("Thread id %d is created\n", i + 1);
 		pthread_create(&data->philo[i]->thread,
 			NULL, (void *)philo_loop, (void *)data->philo[i]);
 		i--;
 	}
-	gettimeofday(&data->start, NULL);
-	if (data->n_philo > 1)
-		pthread_create(&data->monitor, NULL, (void *)monitor, (void *)data);
+	pthread_create(&data->monitor, NULL, (void *)monitor, (void *)data);
 }
 
 static bool	data_init(t_phdata *data, char **av)
@@ -108,7 +106,7 @@ int	main(int ac, char **av)
 	{
 		pthread_join(data->philo[i]->thread, NULL);
 		if (PHILO_DEBUG)
-			printf("Thread id %d is join\n", i);
+			printf("Thread id %d is join\n", i + 1);
 		i++;
 	}
 	ft_alist_free();

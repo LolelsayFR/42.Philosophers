@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:07:57 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/13 09:19:48 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/15 13:11:05 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,11 @@ void	ms_sleep(const int ms, t_philo *philo)
 	{
 		gettimeofday(&philo->cur_time, NULL);
 		elapsed = time_to_ms(philo->cur_time, philo->last_update);
-		if (elapsed >= ms || death_check(philo))
+		pthread_mutex_lock(philo->data->monilock);
+		if (elapsed >= ms || philo->data->is_running == false)
 			break ;
+		pthread_mutex_unlock(philo->data->monilock);
 		usleep(50);
 	}
+	pthread_mutex_unlock(philo->data->monilock);
 }

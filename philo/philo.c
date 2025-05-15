@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:12:47 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/13 10:05:04 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:43:09 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 
 static void	philo_sleep(t_philo *philo, t_phdata *data)
 {
-	death_check(philo);
 	philo_set_status(philo, SLEEP, data);
 	ms_sleep(data->ttsleep, philo);
 }
 
 static void	philo_think(t_philo *philo, t_phdata *data)
 {
-	death_check(philo);
 	philo_set_status(philo, THINK, data);
 }
 
@@ -42,8 +40,7 @@ static void	philo_take_fork(t_philo *philo, t_phdata *data)
 	}
 	pthread_mutex_lock(left);
 	philo_set_status(philo, TAKE_FORK, data);
-	death_check(philo);
-	if (philo->status == DEAD)
+	if (philo->is_alive == false || data->n_fork == 1)
 	{
 		pthread_mutex_unlock(left);
 		return ;
@@ -54,10 +51,10 @@ static void	philo_take_fork(t_philo *philo, t_phdata *data)
 
 static void	*philo_eat(t_philo *philo, t_phdata *data)
 {
-	if (data->n_fork == 1)
-		return (ms_sleep(data->ttdie, philo), NULL);
 	philo_take_fork(philo, data);
-	if (philo->status == DEAD)
+	if (data->n_fork == 1)
+		return (ms_sleep(data->ttdie + 1, philo), NULL);
+	if (philo->is_alive == false)
 		return (NULL);
 	philo_set_status(philo, EAT, data);
 	gettimeofday(&philo->last_eat, NULL);
@@ -68,7 +65,13 @@ static void	*philo_eat(t_philo *philo, t_phdata *data)
 		pthread_mutex_lock(philo->set_status);
 		philo->is_full = true;
 		pthread_mutex_unlock(philo->set_status);
+		pthread_mutex_lock(philo->data->monilock);
+		if (philo->n_meal == data->n_must_eat)
+			philo->data->full_count++;
+		pthread_mutex_unlock(philo->data->monilock);
 	}
+	if (PHILO_DEBUG && philo->n_meal == data->n_must_eat)
+		printf("Philo %d is full\n", philo->id + 1);
 	pthread_mutex_unlock(data->phforks[philo->id]);
 	pthread_mutex_unlock(data->phforks[philo->id_next_fork]);
 	return (NULL);
@@ -77,7 +80,7 @@ static void	*philo_eat(t_philo *philo, t_phdata *data)
 void	*philo_loop(t_philo *philo)
 {
 	if (PHILO_DEBUG)
-		printf("Philo %d enter the routine\n", philo->id);
+		printf("Philo %d enter the routine\n", philo->id + 1);
 	gettimeofday(&philo->last_eat, NULL);
 	gettimeofday(&philo->last_update, NULL);
 	if (philo->id == philo->data->n_fork - 1)
@@ -90,7 +93,8 @@ void	*philo_loop(t_philo *philo)
 		pthread_mutex_unlock(philo->data->monilock);
 		philo_eat(philo, philo->data);
 		pthread_mutex_lock(philo->data->monilock);
-		if (!philo->is_alive || !philo->data->is_running)
+		if (!philo->is_alive || !philo->data->is_running
+			|| philo->data->n_fork == 1)
 			break ;
 		pthread_mutex_unlock(philo->data->monilock);
 		philo_sleep(philo, philo->data);

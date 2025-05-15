@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:45:59 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/13 11:34:30 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:35:19 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,27 @@
 
 void	wr_philo_msg(t_philo *philo, t_phdata *data, int status)
 {
+	(void)data;
 	pthread_mutex_unlock(philo->data->write);
 	if (philo->is_alive == false)
 		return ;
-	pthread_mutex_lock(philo->set_status);
-	pthread_mutex_lock(data->monilock);
-	if (status == SLEEP && data->is_running)
+	if (status == SLEEP)
 		printf(L_TIME L_P_SL"\n",
 			time_to_ms(philo->last_update, philo->data->start), philo->id + 1);
-	else if (status == THINK && data->is_running)
+	else if (status == THINK)
 		printf(L_TIME L_P_TH"\n",
 			time_to_ms(philo->last_update, philo->data->start), philo->id + 1);
-	else if (status == TAKE_FORK && data->is_running)
+	else if (status == TAKE_FORK)
 		printf(L_TIME L_P_TF"\n",
 			time_to_ms(philo->last_update, philo->data->start), philo->id + 1);
-	else if (status == EAT && data->is_running)
+	else if (status == EAT)
 		printf(L_TIME L_P_EA"\n",
 			time_to_ms(philo->last_update, philo->data->start), philo->id + 1);
-	pthread_mutex_unlock(data->monilock);
-	pthread_mutex_unlock(philo->set_status);
 }
 
 void	philo_set_status(t_philo *philo, int status, t_phdata *data)
 {
+	pthread_mutex_lock(philo->data->monilock);
 	gettimeofday(&philo->cur_time, NULL);
 	gettimeofday(&philo->last_update, NULL);
 	pthread_mutex_lock(philo->data->write);
@@ -44,38 +42,11 @@ void	philo_set_status(t_philo *philo, int status, t_phdata *data)
 		wr_philo_msg(philo, data, status);
 	else
 		pthread_mutex_unlock(philo->data->write);
-	if (status != TAKE_FORK && philo->status != DEAD)
+	if (status != TAKE_FORK)
 	{
 		pthread_mutex_lock(philo->set_status);
 		philo->status = status;
 		pthread_mutex_unlock(philo->set_status);
 	}
-	if (philo->status == DEAD || status == DEAD)
-		philo->is_alive = false;
-}
-
-bool	death_check(t_philo *philo)
-{
-	gettimeofday(&philo->cur_time, NULL);
-	if ((time_to_ms(philo->cur_time, philo->data->start)
-			- time_to_ms(philo->last_eat, philo->data->start))
-		> philo->data->ttdie)
-	{
-		if (philo->status == DEAD)
-			return (true);
-		pthread_mutex_lock(philo->set_status);
-		pthread_mutex_lock(philo->data->monilock);
-		pthread_mutex_lock(philo->data->write);
-		if (philo->data->is_running == true && philo->data->can_write == true)
-			printf(L_TIME L_P_DI"\n",
-				time_to_ms(philo->cur_time, philo->data->start), philo->id + 1);
-		philo->data->can_write = false;
-		pthread_mutex_unlock(philo->data->write);
-		pthread_mutex_unlock(philo->data->monilock);
-		philo->status = DEAD;
-		philo->is_alive = false;
-		pthread_mutex_unlock(philo->set_status);
-		return (true);
-	}
-	return (false);
+	pthread_mutex_unlock(philo->data->monilock);
 }

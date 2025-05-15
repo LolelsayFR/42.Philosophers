@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/13 13:32:19 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:43:07 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 # define EAT			1
 # define THINK			2
 # define TAKE_FORK		3
-# define DEAD			-1
 
 //Set Dev macro
 # ifndef PHILO_DEBUG
@@ -75,6 +74,7 @@ typedef struct s_phdata
 	int				tteat;
 	int				ttsleep;
 	int				n_must_eat;
+	int				full_count;
 	struct timeval	start;
 	t_philo			**philo;
 	pthread_t		monitor;
