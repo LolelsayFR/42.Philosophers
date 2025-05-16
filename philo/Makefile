@@ -61,7 +61,7 @@ clean:	hello
 
 fclean:	hello clean
 	@echo "\e[48;2;155;100;0;1m	Uninstall Philo	\e[0m\n"
-	$(RM) $(NAME) $(D_NAME)	$(T_NAME) $(A_NAME)
+	$(RM) $(NAME) $(D_NAME) $(T_NAME) $(A_NAME)
 	@echo "\e[48;2;0;0;155;1m Done \e[0m\n"
 
 %.o: %.c

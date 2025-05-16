@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 05:09:01 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/15 16:14:42 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:54:45 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_philo
 	struct timeval	last_eat;
 	struct timeval	cur_time;
 	struct s_phdata	*data;
+	struct timeval	start;
 }	t_philo;
 
 typedef struct s_phdata
@@ -73,7 +74,6 @@ typedef struct s_phdata
 	int				ttsleep;
 	int				n_must_eat;
 	int				full_count;
-	struct timeval	start;
 	t_philo			**philo;
 	pthread_t		monitor;
 	pthread_mutex_t	**phforks;

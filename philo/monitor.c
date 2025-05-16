@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 09:44:51 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/15 16:07:26 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:55:04 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 bool	death_check(t_philo *philo)
 {
 	gettimeofday(&philo->cur_time, NULL);
-	if ((time_to_ms(philo->cur_time, philo->data->start)
-			- time_to_ms(philo->last_eat, philo->data->start))
+	if ((time_to_ms(philo->cur_time, philo->start)
+			- time_to_ms(philo->last_eat, philo->start))
 		> philo->data->ttdie)
 	{
 		pthread_mutex_lock(philo->data->write);
 		if (philo->data->is_running == true && philo->data->can_write == true)
 			printf(L_TIME L_P_DI"\n",
-				time_to_ms(philo->cur_time, philo->data->start), philo->id + 1);
+				time_to_ms(philo->cur_time, philo->start), philo->id + 1);
 		philo->data->can_write = false;
 		pthread_mutex_unlock(philo->data->write);
 		pthread_mutex_lock(philo->data->monilock);

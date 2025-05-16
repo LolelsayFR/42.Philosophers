@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:18:28 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/15 16:14:34 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:53:52 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void	philo_tab_launcher(int i, t_phdata *data)
 {
 	ft_alist_add_back(data->philo = ft_calloc(i, sizeof(t_philo *)));
 	i--;
-	gettimeofday(&data->start, NULL);
 	while (i >= 0)
 	{
 		ft_alist_add_back(data->philo[i] = ft_calloc(1, sizeof(t_philo)));

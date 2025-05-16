@@ -6,7 +6,7 @@
 /*   By: emaillet <emaillet@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:12:47 by emaillet          #+#    #+#             */
-/*   Updated: 2025/05/15 16:08:15 by emaillet         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:54:31 by emaillet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	*philo_loop(t_philo *philo)
 		printf("Philo %d enter the routine\n", philo->id + 1);
 	gettimeofday(&philo->last_eat, NULL);
 	gettimeofday(&philo->last_update, NULL);
+	gettimeofday(&philo->start, NULL);
 	if (philo->id == philo->data->n_fork - 1)
 		philo->id_next_fork = 0;
 	else
